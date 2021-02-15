@@ -1,4 +1,5 @@
-﻿using PP.Core.DomainObjects;
+﻿using System;
+using PP.Core.DomainObjects;
 
 namespace PP.Aluno.API.Models
 {
@@ -10,9 +11,14 @@ namespace PP.Aluno.API.Models
 
         public AnamnesePergunta AnamnesePergunta { get; set; }
 
-        public AnamneseResposta(string resposta)
+        public AnamneseResposta(Guid id, string resposta)
         {
+            Id = id;
             Resposta = resposta;
+        }
+
+        public void AtribuirAnamnesePergunta(AnamnesePergunta anamnesePergunta) {
+            AnamnesePergunta = anamnesePergunta;
         }
     }
 }

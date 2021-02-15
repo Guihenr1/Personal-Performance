@@ -1,4 +1,5 @@
-﻿using PP.Core.DomainObjects;
+﻿using System;
+using PP.Core.DomainObjects;
 
 namespace PP.Aluno.API.Models
 {
@@ -8,8 +9,9 @@ namespace PP.Aluno.API.Models
 
         protected AnamnesePergunta() { }
 
-        public AnamnesePergunta(string pergunta)
+        public AnamnesePergunta(Guid id, string pergunta)
         {
+            Id = id;
             Pergunta = pergunta;
         }
     }

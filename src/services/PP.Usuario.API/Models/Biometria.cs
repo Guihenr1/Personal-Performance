@@ -3,7 +3,7 @@ using PP.Core.DomainObjects;
 
 namespace PP.Aluno.API.Models
 {
-    public class Biometria : Entity
+    public class Biometria : Entity, IAggregateRoot
     {
         public int Peso { get; set; }
         public double Altura { get; set; }
@@ -26,8 +26,9 @@ namespace PP.Aluno.API.Models
 
         public Aluno Aluno { get; set; }
 
-        public Biometria(int peso, double altura, int bracoDireito, int bracoEsquerdo, int torax, int cintura, int quadril, int coxaDireita, int coxaEsquerda, int gemeoDireito, int gemeoEsquerdo, int anteBracoDireito, int anteBracoEsquerdo)
+        public Biometria(Guid id, int peso, double altura, int bracoDireito, int bracoEsquerdo, int torax, int cintura, int quadril, int coxaDireita, int coxaEsquerda, int gemeoDireito, int gemeoEsquerdo, int anteBracoDireito, int anteBracoEsquerdo)
         {
+            Id = id;
             Peso = peso;
             Altura = altura;
             BracoDireito = bracoDireito;
@@ -43,6 +44,10 @@ namespace PP.Aluno.API.Models
             AnteBracoEsquerdo = anteBracoEsquerdo;
             DataCadastro = DateTime.Now;
             Desativado = false;
+        }
+
+        public void AtribuirAluno(Aluno aluno) {
+            Aluno = aluno;
         }
     }
 }
