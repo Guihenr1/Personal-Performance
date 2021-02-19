@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PP.Aluno.API.Configuration;
 
-namespace PP.Aluno.API {
+namespace PP.Usuario.API {
     public class Startup {
         public IConfiguration Configuration { get; }
 

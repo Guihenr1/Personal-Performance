@@ -1,7 +1,7 @@
 ﻿using System;
 using PP.Core.DomainObjects;
 
-namespace PP.Aluno.API.Models
+namespace PP.Usuario.API.Models
 {
     public class Ficha : Entity, IAggregateRoot
     {
@@ -10,7 +10,9 @@ namespace PP.Aluno.API.Models
 
         protected Ficha() { }
 
+        public Guid AlunoId { get; set; }
         public Aluno Aluno { get; set; }
+        public Guid AnamneseRespostaId { get; set; }
         public AnamneseResposta AnamneseResposta { get; set; }
 
         public Ficha(Guid id, string objetivo)

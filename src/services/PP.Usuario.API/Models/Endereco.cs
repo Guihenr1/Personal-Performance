@@ -1,7 +1,8 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using PP.Core.DomainObjects;
 
-namespace PP.Aluno.API.Models
+namespace PP.Usuario.API.Models
 {
     public class Endereco : Entity {
         public int Cep { get; set; }
@@ -13,10 +14,13 @@ namespace PP.Aluno.API.Models
 
         protected Endereco() { }
 
+        [ForeignKey("Aluno")]
+        public Guid AlunoId { get; set; }
         public Aluno Aluno { get; set; }
+        public Guid EstadoId { get; set; }
         public Estado Estado { get; set; }
 
-        public Endereco(Guid id, int cep, string logradouro, int numero, string bairro, string complemento, string cidade)
+        public Endereco(Guid id, int cep, string logradouro, int numero, string bairro, string complemento, string cidade, Estado estado)
         {
             Id = id;
             Cep = cep;
@@ -25,13 +29,6 @@ namespace PP.Aluno.API.Models
             Bairro = bairro;
             Complemento = complemento;
             Cidade = cidade;
-        }
-
-        public void AtribuirAluno(Aluno aluno) {
-            Aluno = aluno;
-        }
-
-        public void AtribuirEstado(Estado estado) {
             Estado = estado;
         }
     }

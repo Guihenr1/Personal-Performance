@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using PP.Core.DomainObjects;
 
-namespace PP.Aluno.API.Models
+namespace PP.Usuario.API.Models
 {
     public class AnamneseResposta : Entity
     {
@@ -9,7 +11,9 @@ namespace PP.Aluno.API.Models
 
         protected AnamneseResposta() { }
 
+        public Guid AnamnesePerguntaId { get; set; }
         public AnamnesePergunta AnamnesePergunta { get; set; }
+        public ICollection<Ficha> Ficha { get; set; }
 
         public AnamneseResposta(Guid id, string resposta)
         {

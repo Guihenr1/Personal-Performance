@@ -1,7 +1,7 @@
 ﻿using System;
 using PP.Core.DomainObjects;
 
-namespace PP.Aluno.API.Models
+namespace PP.Usuario.API.Models
 {
     public class Estado : Entity
     {

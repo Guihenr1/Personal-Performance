@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PP.Usuario.API.Data;
 
 namespace PP.Aluno.API.Configuration
 {
     public static class ApiConfig {
         public static void AddApiConfiguration(this IServiceCollection services, IConfiguration configuration) {
-            //services.AddDbContext<ClientesContext>(options =>
-            //    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<UsuarioContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllers();
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using PP.Core.DomainObjects;
 
-namespace PP.Aluno.API.Models
+namespace PP.Usuario.API.Models
 {
     public class Biometria : Entity, IAggregateRoot
     {
@@ -24,6 +24,7 @@ namespace PP.Aluno.API.Models
 
         protected Biometria() { }
 
+        public Guid AlunoId { get; set; }
         public Aluno Aluno { get; set; }
 
         public Biometria(Guid id, int peso, double altura, int bracoDireito, int bracoEsquerdo, int torax, int cintura, int quadril, int coxaDireita, int coxaEsquerda, int gemeoDireito, int gemeoEsquerdo, int anteBracoDireito, int anteBracoEsquerdo)

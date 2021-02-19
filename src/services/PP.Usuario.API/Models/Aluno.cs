@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using PP.Core.DomainObjects;
 
-namespace PP.Aluno.API.Models
+namespace PP.Usuario.API.Models
 {
     public class Aluno : Entity, IAggregateRoot
     {
@@ -14,8 +16,13 @@ namespace PP.Aluno.API.Models
 
         protected Aluno() {}
 
+        public Guid ProfessorId { get; set; }
         public Professor Professor { get; set; }
+        [ForeignKey("Endereco")]
+        public Guid EnderecoId { get; set; }
         public Endereco Endereco { get; set; }
+        public ICollection<Biometria> Biometria { get; set; }
+        public ICollection<Ficha> Ficha { get; set; }
 
         public Aluno(Guid id, string nome, DateTime dataNascimento, string email)
         {

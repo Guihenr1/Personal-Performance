@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using PP.Core.DomainObjects;
 
-namespace PP.Aluno.API.Models
+namespace PP.Usuario.API.Models
 {
     public class Professor : Entity, IAggregateRoot
     {
@@ -11,6 +12,8 @@ namespace PP.Aluno.API.Models
         public DateTime DataCadastro { get; set; }
         public DateTime? DataExcluido { get; set; }
         public bool Excluido { get; set; }
+
+        public ICollection<Aluno> Aluno { get; set; }
 
         protected Professor() { }
 
