@@ -27,13 +27,13 @@ namespace PP.Usuario.API {
         public void ConfigureServices(IServiceCollection services) {
             services.AddApiConfiguration(Configuration);
 
-            //services.AddJwtConfiguration(Configuration);
+            // services.AddJwtConfiguration(Configuration);
 
             services.AddSwaggerConfiguration();
 
-            services.AddMediatR(typeof(Startup));
-
             services.RegisterServices();
+
+            services.AddMediatR(typeof(Startup));
 
             //services.AddMessageBusConfiguration(Configuration);
         }
