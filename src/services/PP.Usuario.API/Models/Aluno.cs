@@ -48,5 +48,9 @@ namespace PP.Usuario.API.Models
         {
             Professor = professor;
         }
+
+        public void ExcluirAluno() {
+            Excluido = true;
+        }
     }
 }
