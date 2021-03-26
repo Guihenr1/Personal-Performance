@@ -1,15 +1,14 @@
 ﻿using System;
 using FluentValidation;
-using PP.Usuario.API.Application.Commands.Aluno;
+using PP.Usuario.API.Application.Commands.Professor;
 
-namespace PP.Usuario.API.Application.Commands.Validations.Aluno
+namespace PP.Usuario.API.Application.Commands.Validations.Professor
 {
-    public class AlunoValidation<T> : AbstractValidator<T> where T : AlunoCommand {
-        protected void ValidateId()
-        {
+    public class ProfessorValidation<T> : AbstractValidator<T> where T : ProfessorCommand {
+        protected void ValidateId() {
             RuleFor(a => a.Id)
                 .NotEqual(Guid.Empty)
-                .WithMessage("Id do aluno inválido");
+                .WithMessage("Id do professor inválido");
         }
 
         protected void ValidateEmail() {
@@ -18,21 +17,22 @@ namespace PP.Usuario.API.Application.Commands.Validations.Aluno
                 .WithMessage("O e-mail informado não é valido");
         }
 
+        protected void ValidateCREF() {
+            RuleFor(a => a.CREF)
+                .NotEmpty()
+                .WithMessage("CREF do professor inválido");
+        }
+
         protected void ValidateNome() {
             RuleFor(a => a.Nome)
                 .NotEmpty().WithMessage("Informe o nome")
                 .Length(2, 100).WithMessage("O nome deve ter entre 2 e 100 caracteres");
         }
 
-        protected void ValidateDataNascimento() {
-            RuleFor(c => c.DataNascimento)
+        protected void ValidateDataCadastro() {
+            RuleFor(a => a.DataCadastro)
                 .NotEmpty()
-                .Must(terIdadeMinima)
-                .WithMessage("O aluno deve ter no mínimo 18 anos");
-        }
-
-        protected static bool terIdadeMinima(DateTime dataNascimento) {
-            return dataNascimento <= DateTime.Now.AddYears(-18);
+                .WithMessage("Data cadastro do professor inválido");
         }
 
         public static bool TerEmailValido(string email) {

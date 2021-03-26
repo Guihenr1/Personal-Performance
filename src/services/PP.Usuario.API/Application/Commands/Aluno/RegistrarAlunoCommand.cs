@@ -10,6 +10,7 @@ namespace PP.Usuario.API.Application.Commands.Aluno {
             Email = email;
             DataNascimento = dataNascimento;
             Excluido = excluido;
+            DataCadastro = DateTime.Now;
         }
 
         public override bool EhValido()

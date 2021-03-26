@@ -108,10 +108,10 @@ namespace PP.Usuario.API.Migrations
                     b.Property<Guid>("AlunoId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("AnteBracoDireito")
+                    b.Property<decimal>("AntebracoDireito")
                         .HasColumnType("decimal(5,2)");
 
-                    b.Property<decimal>("AnteBracoEsquerdo")
+                    b.Property<decimal>("AntebracoEsquerdo")
                         .HasColumnType("decimal(5,2)");
 
                     b.Property<decimal>("BracoDireito")

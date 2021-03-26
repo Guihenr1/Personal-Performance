@@ -4,7 +4,7 @@ using PP.Core.DomainObjects;
 
 namespace PP.Usuario.API.Models
 {
-    public class AnamnesePergunta : Entity 
+    public class AnamnesePergunta : Entity, IAggregateRoot 
     {
         public string Pergunta { get; set; }
 

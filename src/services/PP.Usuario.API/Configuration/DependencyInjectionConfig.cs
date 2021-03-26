@@ -13,7 +13,7 @@ namespace PP.Aluno.API.Configuration
         public static void RegisterServices(this IServiceCollection services)
         {
             services.AddScoped<IMediatorHandler, MediatorHandler>();
-            services.AddScoped<IRequestHandler<RegistrarAlunoCommand, ValidationResult>, UsuarioCommandHandler>();
+            services.AddScoped<IRequestHandler<RegistrarAlunoCommand, ValidationResult>, AlunoCommandHandler>();
 
             services.AddScoped<IAlunoRepository, AlunoRepository>();
             services.AddScoped<UsuarioContext>();

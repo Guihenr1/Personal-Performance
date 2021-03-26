@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using MediatR;
@@ -6,11 +7,13 @@ using PP.Core.Messages;
 using PP.Usuario.API.Models;
 
 namespace PP.Usuario.API.Application.Commands.Aluno {
-    public class UsuarioCommandHandler : CommandHandler, IRequestHandler<RegistrarAlunoCommand, ValidationResult>
-    {
+    public class AlunoCommandHandler : CommandHandler, 
+        IRequestHandler<RegistrarAlunoCommand, ValidationResult>,
+        IRequestHandler<AtualizarAlunoCommand, ValidationResult>,
+        IRequestHandler<RemoverAlunoCommand, ValidationResult> {
         private readonly IAlunoRepository _alunoRepository;
 
-        public UsuarioCommandHandler(IAlunoRepository alunoRepository)
+        public AlunoCommandHandler(IAlunoRepository alunoRepository)
         {
             _alunoRepository = alunoRepository;
         }
@@ -19,7 +22,7 @@ namespace PP.Usuario.API.Application.Commands.Aluno {
         {
             if (!message.EhValido()) return message.ValidationResult;
 
-            var aluno = new Models.Aluno(message.Id, message.Nome, message.DataNascimento, message.Email);
+            var aluno = new Models.Aluno(Guid.NewGuid(), message.Nome, message.DataNascimento, message.Email);
 
             var alunoExistente = await _alunoRepository.ObterPorEmail(aluno.Email.Endereco);
 

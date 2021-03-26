@@ -50,6 +50,7 @@ namespace PP.Usuario.API.Models
         }
 
         public void ExcluirAluno() {
+            DataExcluido = DateTime.Now;
             Excluido = true;
         }
     }

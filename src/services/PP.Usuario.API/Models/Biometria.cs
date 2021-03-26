@@ -50,5 +50,10 @@ namespace PP.Usuario.API.Models
         public void AtribuirAluno(Aluno aluno) {
             Aluno = aluno;
         }
+
+        public void DesativarBiometria() {
+            Desativado = true;
+            DataDesativacao = DateTime.Now;
+        }
     }
 }

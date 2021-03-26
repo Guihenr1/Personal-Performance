@@ -26,5 +26,10 @@ namespace PP.Usuario.API.Models
             DataCadastro = DateTime.Now;
             Excluido = false;
         }
+
+        public void ExcluirProfessor()
+        {
+            Excluido = true;
+        }
     }
 }

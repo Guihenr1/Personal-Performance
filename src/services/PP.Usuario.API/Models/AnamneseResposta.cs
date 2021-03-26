@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using PP.Core.DomainObjects;
 
 namespace PP.Usuario.API.Models
 {
-    public class AnamneseResposta : Entity
-    {
+    public class AnamneseResposta : Entity, IAggregateRoot {
         public string Resposta { get; set; }
 
         protected AnamneseResposta() { }
