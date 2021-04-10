@@ -7,9 +7,17 @@ namespace PP.Usuario.API.Application.Commands.Validations.Aluno
         public AtualizarAlunoValidation()
         {
             ValidateId();
+            ValidateProfessorId();
             ValidateEmail();
             ValidateNome();
             ValidateDataNascimento();
+            ValidateCep();
+            ValidateLogradouro();
+            ValidateNumero();
+            ValidateBairro();
+            ValidateComplemento();
+            ValidateCidade();
+            ValidateEstadoId();
         }
     }
 }

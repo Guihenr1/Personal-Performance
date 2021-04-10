@@ -10,8 +10,7 @@ namespace PP.Usuario.API.Application.Commands.Ficha
 {
     public class FichaCommandHandler : CommandHandler,
         IRequestHandler<RegistrarFichaCommand, ValidationResult>,
-        IRequestHandler<AtualizarFichaCommand, ValidationResult>,
-        IRequestHandler<RemoverFichaCommand, ValidationResult> {
+        IRequestHandler<AtualizarFichaCommand, ValidationResult> {
         private readonly IFichaRepository _fichaRepository;
 
         public FichaCommandHandler(IFichaRepository fichaRepository) {
@@ -34,21 +33,6 @@ namespace PP.Usuario.API.Application.Commands.Ficha
             var ficha = new Models.Ficha(Guid.NewGuid(), message.Objetivo);
 
             _fichaRepository.Atualizar(ficha);
-
-            return await PersistirDados(_fichaRepository.UnitOfWork);
-        }
-
-        public async Task<ValidationResult> Handle(RemoverFichaCommand message, CancellationToken cancellationToken) {
-            if (!message.EhValido()) return message.ValidationResult;
-
-            var ficha = await _fichaRepository.ObterPorId(message.Id);
-
-            if (ficha is null) {
-                AdicionarErro("Ficha não existe.");
-                return ValidationResult;
-            }
-
-            _fichaRepository.Remover(ficha);
 
             return await PersistirDados(_fichaRepository.UnitOfWork);
         }

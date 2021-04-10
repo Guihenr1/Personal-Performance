@@ -9,7 +9,6 @@ namespace PP.Usuario.API.Models
     {
         void Adicionar(Professor professor);
         void Atualizar(Professor professor);
-        Task<IEnumerable<Professor>> ObterTodos();
         Task<Professor> ObterPorEmail(string email);
         Task<Professor> ObterPorId(Guid id);
     }

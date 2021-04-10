@@ -6,35 +6,35 @@ using MediatR;
 using PP.Core.Messages;
 using PP.Usuario.API.Models;
 
-namespace PP.Usuario.API.Application.Commands.AnamnesePergunta
+namespace PP.Usuario.API.Application.Commands.AnamneseResposta
 {
-    public class AnamnesePerguntaCommandHandler : CommandHandler,
-        IRequestHandler<RegistrarAnamnesePerguntaCommand, ValidationResult>,
-        IRequestHandler<AtualizarAnamnesePerguntaCommand, ValidationResult> {
-        private readonly IAnamnesePerguntaRepository _anamnesePerguntaRepository;
+    public class AnamneseRespostaCommandHandler : CommandHandler,
+        IRequestHandler<RegistrarAnamneseRespostaCommand, ValidationResult>,
+        IRequestHandler<AtualizarAnamneseRespostaCommand, ValidationResult> {
+        private readonly IAnamneseRespostaRepository _anamneseRespostaRepository;
 
-        public AnamnesePerguntaCommandHandler(IAnamnesePerguntaRepository anamnesePerguntaRepository) {
-            _anamnesePerguntaRepository = anamnesePerguntaRepository;
+        public AnamneseRespostaCommandHandler(IAnamneseRespostaRepository anamneseRespostaRepository) {
+            _anamneseRespostaRepository = anamneseRespostaRepository;
         }
 
-        public async Task<ValidationResult> Handle(RegistrarAnamnesePerguntaCommand message, CancellationToken cancellationToken) {
+        public async Task<ValidationResult> Handle(RegistrarAnamneseRespostaCommand message, CancellationToken cancellationToken) {
             if (!message.EhValido()) return message.ValidationResult;
 
-            var anamnesePergunta = new Models.AnamnesePergunta(Guid.NewGuid(), message.Pergunta);
+            var anamneseResposta = new Models.AnamneseResposta(Guid.NewGuid(), message.Resposta, message.AnamnesePerguntaId);
 
-            _anamnesePerguntaRepository.Adicionar(anamnesePergunta);
+            _anamneseRespostaRepository.Adicionar(anamneseResposta);
 
-            return await PersistirDados(_anamnesePerguntaRepository.UnitOfWork);
+            return await PersistirDados(_anamneseRespostaRepository.UnitOfWork);
         }
 
-        public async Task<ValidationResult> Handle(AtualizarAnamnesePerguntaCommand message, CancellationToken cancellationToken) {
+        public async Task<ValidationResult> Handle(AtualizarAnamneseRespostaCommand message, CancellationToken cancellationToken) {
             if (!message.EhValido()) return message.ValidationResult;
 
-            var anamnesePergunta = new Models.AnamnesePergunta(Guid.NewGuid(), message.Pergunta);
+            var anamneseResposta = new Models.AnamneseResposta(Guid.NewGuid(), message.Resposta, message.AnamnesePerguntaId);
 
-            _anamnesePerguntaRepository.Atualizar(anamnesePergunta);
+            _anamneseRespostaRepository.Atualizar(anamneseResposta);
 
-            return await PersistirDados(_anamnesePerguntaRepository.UnitOfWork);
+            return await PersistirDados(_anamneseRespostaRepository.UnitOfWork);
         }
     }
 }

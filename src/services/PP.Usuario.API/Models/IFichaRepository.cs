@@ -9,7 +9,6 @@ namespace PP.Usuario.API.Models
     {
         void Adicionar(Ficha ficha);
         void Atualizar(Ficha ficha);
-        void Remover(Ficha ficha);
         Task<IEnumerable<Ficha>> ObterTodos();
         Task<Ficha> ObterPorId(Guid id);
     }

@@ -13,10 +13,11 @@ namespace PP.Usuario.API.Models
         public AnamnesePergunta AnamnesePergunta { get; set; }
         public ICollection<Ficha> Ficha { get; set; }
 
-        public AnamneseResposta(Guid id, string resposta)
+        public AnamneseResposta(Guid id, string resposta, Guid anamnesePerguntaId)
         {
             Id = id;
             Resposta = resposta;
+            AnamnesePerguntaId = anamnesePerguntaId;
         }
 
         public void AtribuirAnamnesePergunta(AnamnesePergunta anamnesePergunta) {

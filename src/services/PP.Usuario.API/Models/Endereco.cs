@@ -5,7 +5,7 @@ using PP.Core.DomainObjects;
 namespace PP.Usuario.API.Models
 {
     public class Endereco : Entity {
-        public int Cep { get; set; }
+        public string Cep { get; set; }
         public string Logradouro { get; set; }
         public int Numero { get; set; }
         public string Bairro { get; set; }
@@ -17,10 +17,11 @@ namespace PP.Usuario.API.Models
         [ForeignKey("Aluno")]
         public Guid AlunoId { get; set; }
         public Aluno Aluno { get; set; }
+        [ForeignKey("Estado")]
         public Guid EstadoId { get; set; }
         public Estado Estado { get; set; }
 
-        public Endereco(Guid id, int cep, string logradouro, int numero, string bairro, string complemento, string cidade, Estado estado)
+        public Endereco(Guid id, string cep, string logradouro, int numero, string bairro, string complemento, string cidade, Guid estadoId, Guid alunoId)
         {
             Id = id;
             Cep = cep;
@@ -29,7 +30,8 @@ namespace PP.Usuario.API.Models
             Bairro = bairro;
             Complemento = complemento;
             Cidade = cidade;
-            Estado = estado;
+            EstadoId = estadoId;
+            AlunoId = alunoId;
         }
     }
 }

@@ -16,6 +16,7 @@ namespace PP.Usuario.API.Models
 
         protected Aluno() {}
 
+        [ForeignKey("Professor")]
         public Guid ProfessorId { get; set; }
         public Professor Professor { get; set; }
         [ForeignKey("Endereco")]
@@ -44,9 +45,9 @@ namespace PP.Usuario.API.Models
             Endereco = endereco;
         }
 
-        public void AtribuirProfessor(Professor professor) 
+        public void AtribuirProfessor(Guid professorId) 
         {
-            Professor = professor;
+            ProfessorId = professorId;
         }
 
         public void ExcluirAluno() {

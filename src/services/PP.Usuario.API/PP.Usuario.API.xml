@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PP.Usuario.API</name>
+    </assembly>
+    <members>
+        <member name="M:PP.Usuario.API.Controllers.AlunoController.Index(PP.Usuario.API.Application.Commands.Aluno.RegistrarAlunoCommand)">
+             <summary>
+             Criar um aluno.
+             </summary>
+             <remarks>
+             Requisição:
+             
+                 {
+                     "Nome": "",
+                     "ProfessorId": "",
+                     "Email": "",
+                     "DataNascimento": "",
+                     "Cep": "",
+                     "Logradouro": "",
+                     "Numero": 0,
+                     "Bairro": "",
+                     "Complemento": "",
+                     "Cidade": "",
+                     "EstadoId": ""
+                 }
+            
+             </remarks>
+             <response code="204">Aluno criado com sucesso</response>
+        </member>
+    </members>
+</doc>

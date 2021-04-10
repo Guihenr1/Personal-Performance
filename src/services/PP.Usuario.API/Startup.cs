@@ -35,6 +35,8 @@ namespace PP.Usuario.API {
 
             services.AddMediatR(typeof(Startup));
 
+            services.AddControllers().AddNewtonsoftJson();
+
             //services.AddMessageBusConfiguration(Configuration);
         }
 

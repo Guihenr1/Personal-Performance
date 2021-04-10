@@ -2,8 +2,8 @@
 
 namespace PP.Usuario.API.Application.Commands.Validations.AnamneseResposta
 {
-    public class AtualizarAnamnesePerguntaValidation : AnamnesePerguntaValidation<AtualizarAnamnesePerguntaCommand> {
-        public AtualizarAnamnesePerguntaValidation() {
+    public class AtualizarAnamneseRespostaValidation : AnamneseRespostaValidation<AtualizarAnamneseRespostaCommand> {
+        public AtualizarAnamneseRespostaValidation() {
             ValidateId();
             ValidateAnamnesePerguntaId();
             ValidateResposta();
