@@ -20,5 +20,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\building blocks\PP.Core\PP.Core.csproj" />
+    <ProjectReference Include="..\..\building blocks\PP.MessageBus\PP.MessageBus.csproj" />
+  </ItemGroup>
+
 
 </Project>

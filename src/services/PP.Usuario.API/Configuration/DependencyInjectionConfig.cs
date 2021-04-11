@@ -12,6 +12,7 @@ using PP.Usuario.API.Application.Events.Aluno;
 using PP.Usuario.API.Data;
 using PP.Usuario.API.Data.Repository;
 using PP.Usuario.API.Models;
+using PP.Usuario.API.Services;
 
 namespace PP.Aluno.API.Configuration
 {

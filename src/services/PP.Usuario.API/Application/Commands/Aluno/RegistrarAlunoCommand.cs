@@ -4,9 +4,10 @@ using PP.Usuario.API.Application.Commands.Validations.Aluno;
 namespace PP.Usuario.API.Application.Commands.Aluno {
     public class RegistrarAlunoCommand : AlunoCommand {
 
-        public RegistrarAlunoCommand(string nome, Guid professorId, string email, DateTime dataNascimento, 
+        public RegistrarAlunoCommand(Guid id,string nome, Guid professorId, string email, DateTime dataNascimento, 
             string cep, string logradouro, int numero, string bairro, string complemento, string cidade, Guid estadoId)
         {
+            Id = id;
             Nome = nome;
             ProfessorId = professorId;
             Email = email;

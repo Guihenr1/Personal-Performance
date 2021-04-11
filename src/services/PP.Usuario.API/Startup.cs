@@ -37,7 +37,7 @@ namespace PP.Usuario.API {
 
             services.AddControllers().AddNewtonsoftJson();
 
-            //services.AddMessageBusConfiguration(Configuration);
+            services.AddMessageBusConfiguration(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

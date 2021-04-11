@@ -26,8 +26,7 @@ namespace PP.Usuario.API.Application.Commands.Aluno {
         {
             if (!message.EhValido()) return message.ValidationResult;
 
-            var alunoId = Guid.NewGuid();
-            var aluno = new Models.Aluno(alunoId, message.Nome, message.DataNascimento, message.Email);
+            var aluno = new Models.Aluno(message.Id, message.Nome, message.DataNascimento, message.Email);
 
             var alunoExistente = await _alunoRepository.ObterPorEmail(aluno.Email.Endereco);
             if (alunoExistente != null)
@@ -44,7 +43,7 @@ namespace PP.Usuario.API.Application.Commands.Aluno {
 
             aluno.AtribuirEndereco(new Models.Endereco(
                 Guid.NewGuid(), message.Cep, message.Logradouro, message.Numero, message.Bairro, message.Complemento, message.Cidade, 
-                message.EstadoId, alunoId));
+                message.EstadoId, message.Id));
             aluno.AtribuirProfessor(professor.Id);
             _alunoRepository.Adicionar(aluno);
 

@@ -9,8 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using PP.Core.Controllers;
+using PP.Core.Messages.Integration;
 using PP.Identidade.API.Extensions;
 using PP.Identidade.API.Models;
+using PP.MessageBus;
 
 namespace PP.Identidade.API.Controllers {
     [Route("api/identidade")]
@@ -18,29 +21,40 @@ namespace PP.Identidade.API.Controllers {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppSettings _appSettings;
+        private readonly IMessageBus _bus;
 
         public AuthController(SignInManager<IdentityUser> signInManager,
                               UserManager<IdentityUser> userManager,
-                              IOptions<AppSettings> appSettings) {
+                              IOptions<AppSettings> appSettings,
+                              IMessageBus bus) {
             _signInManager = signInManager;
             _userManager = userManager;
             _appSettings = appSettings.Value;
+            _bus = bus;
         }
 
-        [HttpPost("nova-conta")]
-        public async Task<ActionResult> Registrar(UserViewModels.UsuarioRegistro usuarioRegistro) {
+        [HttpPost("novo-aluno")]
+        public async Task<ActionResult> Registrar(AlunoRegistro alunoRegistro) {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var user = new IdentityUser {
-                UserName = usuarioRegistro.Email,
-                Email = usuarioRegistro.Email,
+                UserName = alunoRegistro.Email,
+                Email = alunoRegistro.Email,
                 EmailConfirmed = true
             };
 
-            var result = await _userManager.CreateAsync(user, usuarioRegistro.Senha);
+            var result = await _userManager.CreateAsync(user, alunoRegistro.Senha);
 
-            if (result.Succeeded) {
-                return CustomResponse(await GerarJwt(usuarioRegistro.Email));
+            if (result.Succeeded)
+            {
+                var alunoResult = await RegistrarAluno(alunoRegistro);
+                if (!alunoResult.ValidationResult.IsValid)
+                {
+                    await _userManager.DeleteAsync(user);
+                    return CustomResponse(alunoResult.ValidationResult);
+                }
+
+                return CustomResponse(await GerarJwt(alunoRegistro.Email));
             }
 
             foreach (var error in result.Errors) {
@@ -51,7 +65,7 @@ namespace PP.Identidade.API.Controllers {
         }
 
         [HttpPost("autenticar")]
-        public async Task<ActionResult> Login(UserViewModels.UsuarioLogin usuarioLogin) {
+        public async Task<ActionResult> Login(UsuarioLogin usuarioLogin) {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var result = await _signInManager.PasswordSignInAsync(usuarioLogin.Email, usuarioLogin.Senha,
@@ -70,7 +84,7 @@ namespace PP.Identidade.API.Controllers {
             return CustomResponse();
         }
 
-        private async Task<UserViewModels.UsuarioRespostaLogin> GerarJwt(string email) {
+        private async Task<UsuarioRespostaLogin> GerarJwt(string email) {
             var user = await _userManager.FindByEmailAsync(email);
             var claims = await _userManager.GetClaimsAsync(user);
 
@@ -112,19 +126,37 @@ namespace PP.Identidade.API.Controllers {
             return tokenHandler.WriteToken(token);
         }
 
-        private UserViewModels.UsuarioRespostaLogin ObterRespostaToken(string encodedToken, IdentityUser user, IEnumerable<Claim> claims) {
-            return new UserViewModels.UsuarioRespostaLogin {
+        private UsuarioRespostaLogin ObterRespostaToken(string encodedToken, IdentityUser user, IEnumerable<Claim> claims) {
+            return new UsuarioRespostaLogin {
                 AccessToken = encodedToken,
                 ExpiresIn = TimeSpan.FromHours(_appSettings.ExpiracaoHoras).TotalSeconds,
-                UsuarioToken = new UserViewModels.UsuarioToken {
+                UsuarioToken = new UsuarioToken {
                     Id = user.Id,
                     Email = user.Email,
-                    Claims = claims.Select(c => new UserViewModels.UsuarioClaim { Type = c.Type, Value = c.Value })
+                    Claims = claims.Select(c => new UsuarioClaim { Type = c.Type, Value = c.Value })
                 }
             };
         }
 
         private static long ToUnixEpochDate(DateTime date)
             => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
+        
+        private async Task<ResponseMessage> RegistrarAluno(AlunoRegistro alunoRegistro) {
+            var aluno = await _userManager.FindByEmailAsync(alunoRegistro.Email);
+            var alunoRegistrado = new AlunoRegistradoIntegrationEvent(Guid.Parse(aluno.Id), alunoRegistro.Nome,
+                alunoRegistro.ProfessorId, alunoRegistro.Email, alunoRegistro.DataNascimento, alunoRegistro.Cep,
+                alunoRegistro.Logradouro, alunoRegistro.Numero, alunoRegistro.Bairro, alunoRegistro.Complemento,
+                alunoRegistro.Cidade, alunoRegistro.EstadoId);
+
+            try
+            {
+                return await _bus.RequestAsync<AlunoRegistradoIntegrationEvent, ResponseMessage>(alunoRegistrado);
+            }
+            catch
+            {
+                await _userManager.DeleteAsync(aluno);
+                throw;
+            }
+        }
     }
 }
