@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PP.Identidade.API.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Atualizacao : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,36 @@ namespace PP.Identidade.API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Username = table.Column<string>(nullable: true),
+                    Token = table.Column<Guid>(nullable: false),
+                    ExpirationDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SecurityKeys",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Parameters = table.Column<string>(nullable: true),
+                    KeyId = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(nullable: true),
+                    Algorithm = table.Column<string>(nullable: true),
+                    CreationDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SecurityKeys", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -208,6 +238,12 @@ namespace PP.Identidade.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "RefreshTokens");
+
+            migrationBuilder.DropTable(
+                name: "SecurityKeys");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

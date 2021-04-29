@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using PP.Core.DomainObjects;
 using PP.Core.Mediator;
 using PP.Core.Messages;
 using PP.Usuario.API.Models;
+using PP.Usuario.API.Models.Configuration;
 
 namespace PP.Usuario.API.Data
 {
@@ -32,6 +34,8 @@ namespace PP.Usuario.API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Ignore<ValidationResult>();
             modelBuilder.Ignore<Event>();
+
+            modelBuilder.ApplyConfiguration(new EstadoConfiguration());
 
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
                 e => e.GetProperties().Where(p => p.ClrType == typeof(string))))

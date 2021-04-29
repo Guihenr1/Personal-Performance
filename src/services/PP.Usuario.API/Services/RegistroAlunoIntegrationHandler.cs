@@ -8,7 +8,6 @@ using PP.Core.Mediator;
 using PP.Core.Messages.Integration;
 using PP.MessageBus;
 using PP.Usuario.API.Application.Commands.Aluno;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace PP.Usuario.API.Services
 {

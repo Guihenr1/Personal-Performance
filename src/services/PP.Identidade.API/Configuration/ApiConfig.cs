@@ -2,11 +2,18 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NetDevPack.Security.JwtSigningCredentials.AspNetCore;
+using PP.Core.Identidade;
+using PP.Core.User;
+using PP.Identidade.API.Services;
 
 namespace PP.Identidade.API.Configuration {
     public static class ApiConfig {
         public static IServiceCollection AddApiConfiguration(this IServiceCollection services) {
             services.AddControllers();
+
+            services.AddScoped<AuthenticationService>();
+            services.AddScoped<IAspNetUser, AspNetUser>();
 
             return services;
         }
@@ -20,11 +27,13 @@ namespace PP.Identidade.API.Configuration {
 
             app.UseRouting();
 
-            app.UseIdentityConfiguration();
+            app.UseAuthConfiguration();
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
+
+            app.UseJwksDiscovery();
 
             return app;
         }
