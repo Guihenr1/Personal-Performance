@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using PP.Core.Controllers;
 using PP.Core.Messages.Integration;
-using PP.Identidade.API.Extensions;
 using PP.Identidade.API.Models;
 using PP.Identidade.API.Services;
 using PP.MessageBus;

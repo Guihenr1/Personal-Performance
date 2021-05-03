@@ -33,7 +33,7 @@ namespace PP.Identidade.API.Configuration {
                 endpoints.MapControllers();
             });
 
-            app.UseJwksDiscovery();
+            app.UseJwksDiscovery(); // Padrao /jwks
 
             return app;
         }

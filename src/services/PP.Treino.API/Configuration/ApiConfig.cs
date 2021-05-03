@@ -40,8 +40,6 @@ namespace PP.Treino.API.Configuration
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.UseCors("Total");
 
             app.UseAuthConfiguration();
