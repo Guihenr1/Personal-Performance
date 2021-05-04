@@ -2,17 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>5df8c90f-2438-4eb2-bbd4-c32407b4466d</UserSecretsId>
+    <UserSecretsId>7ca715ad-11b3-4185-8f09-f21416f47dc4</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\..\building blocks\PP.Core\PP.Core.csproj" />
+    <ProjectReference Include="..\..\building blocks\PP.MessageBus\PP.MessageBus.csproj" />
   </ItemGroup>
 
 
