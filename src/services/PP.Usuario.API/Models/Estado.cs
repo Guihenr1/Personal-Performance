@@ -1,10 +1,10 @@
 ﻿using System;
-using PP.Core.DomainObjects;
+using System.ComponentModel.DataAnnotations;
 
 namespace PP.Usuario.API.Models
 {
-    public class Estado : Entity
-    {
+    public class Estado {
+        public Guid Id { get; set; }
         public string Nome { get; set; }
         public string Sigla { get; set; }
     }

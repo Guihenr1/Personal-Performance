@@ -10,8 +10,8 @@ using PP.Usuario.API.Data;
 namespace PP.Usuario.API.Migrations
 {
     [DbContext(typeof(UsuarioContext))]
-    [Migration("20210427234050_Inicial")]
-    partial class Inicial
+    [Migration("20210505183725_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -228,313 +228,157 @@ namespace PP.Usuario.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d443b958-60e9-481d-b780-ee0a827edbbb"),
+                            Id = new Guid("33e807cb-419d-4115-9988-b2aa187495fc"),
                             Nome = "São Paulo",
                             Sigla = "SP"
                         },
                         new
                         {
-                            Id = new Guid("accbe65b-6445-458d-b162-778da1a55786"),
+                            Id = new Guid("defc1b08-de90-4ab5-ae61-7e519d8fcdf3"),
                             Nome = "Acre",
                             Sigla = "AC"
                         },
                         new
                         {
-                            Id = new Guid("d82d2ad3-ca0c-4ee6-b1ad-0092e9c6c9ff"),
+                            Id = new Guid("274200e1-9a6a-44f4-9388-a2ec36b331bb"),
                             Nome = "Alagoas",
                             Sigla = "AL"
                         },
                         new
                         {
-                            Id = new Guid("bb547a09-fb59-4ba0-a55d-d8f1d751b09c"),
+                            Id = new Guid("640970ce-e1f1-4314-a9df-47c76a2d67fe"),
                             Nome = "Amapá",
                             Sigla = "AP"
                         },
                         new
                         {
-                            Id = new Guid("1e4ac20d-d2a9-4493-8f04-80ba6925864f"),
+                            Id = new Guid("c2acedc2-a3cf-4695-a8f1-2a7a93d94e1a"),
                             Nome = "Bahia",
                             Sigla = "BA"
                         },
                         new
                         {
-                            Id = new Guid("16ef83a4-d52e-4e22-8c2f-154c985768f1"),
+                            Id = new Guid("cc9a0907-716a-46b4-8ae8-fa26c03091d9"),
                             Nome = "Ceará",
                             Sigla = "CE"
                         },
                         new
                         {
-                            Id = new Guid("109411b9-f40d-4ef9-bd80-28b6889fd3a6"),
+                            Id = new Guid("349160b8-b41d-4e6a-80fe-1ab627485f4e"),
                             Nome = "Distrito Federal",
                             Sigla = "DF"
                         },
                         new
                         {
-                            Id = new Guid("7e9ffa89-0fd8-42d1-a354-38edbd7eea69"),
+                            Id = new Guid("ff6ee140-ece6-455b-8b52-f75ce5824a96"),
                             Nome = "Espírito Santo",
                             Sigla = "ES"
                         },
                         new
                         {
-                            Id = new Guid("ddafd76c-597c-4611-a3e3-53d934e10de3"),
+                            Id = new Guid("df0b7049-617c-446f-a8a3-a042378784e5"),
                             Nome = "Goiás",
                             Sigla = "GO"
                         },
                         new
                         {
-                            Id = new Guid("ea415bbe-d08f-48e3-998c-c020f7f6f31b"),
+                            Id = new Guid("11b40f14-51d5-4da3-a295-7db3d129ac20"),
                             Nome = "Maranhão",
                             Sigla = "MA"
                         },
                         new
                         {
-                            Id = new Guid("5870bbc9-af60-4f22-b208-de4a4e84420d"),
+                            Id = new Guid("3a4a0780-4eae-4b1a-b107-685f3aa8a13f"),
                             Nome = "Minas Gerais",
                             Sigla = "MG"
                         },
                         new
                         {
-                            Id = new Guid("1dcb317f-cea9-4a8a-abcf-9e08430c4098"),
+                            Id = new Guid("ef74f3f6-ef3b-4ef2-9453-396d73b0891b"),
                             Nome = "Mato Grosso do Sul",
                             Sigla = "MS"
                         },
                         new
                         {
-                            Id = new Guid("2be005e0-c48e-4521-a882-132dbe053a67"),
+                            Id = new Guid("cdfd6952-c90d-4f15-886f-611b89b6685a"),
                             Nome = "Mato Grosso",
                             Sigla = "MT"
                         },
                         new
                         {
-                            Id = new Guid("5a92eca9-93c9-4093-baca-8435ebe275f6"),
+                            Id = new Guid("e92357f8-6e1c-4ead-807d-e3eebffed9c0"),
                             Nome = "Pará",
                             Sigla = "PA"
                         },
                         new
                         {
-                            Id = new Guid("bdca7a57-9ac9-465a-aaa3-058315e47253"),
+                            Id = new Guid("78d792d2-3e1f-4cce-849f-5f9bf91f53c6"),
                             Nome = "Paraíba",
                             Sigla = "PB"
                         },
                         new
                         {
-                            Id = new Guid("f75fdf14-5f02-4d06-9856-cc2829356941"),
+                            Id = new Guid("3b74bede-7aa4-4292-9746-4b580440594e"),
                             Nome = "Pernambuco",
                             Sigla = "PE"
                         },
                         new
                         {
-                            Id = new Guid("646fe8a4-1aac-4fca-8e52-0f7bdd7bedc1"),
+                            Id = new Guid("ccbd97ae-6612-4d4c-9f04-7b96f5fce185"),
                             Nome = "Piauí",
                             Sigla = "PI"
                         },
                         new
                         {
-                            Id = new Guid("6bbcfa2f-bb45-4845-84c3-36a60cef52d0"),
+                            Id = new Guid("78564eb0-68e2-4e45-86bc-99915c383afc"),
                             Nome = "Paraná",
                             Sigla = "PR"
                         },
                         new
                         {
-                            Id = new Guid("a745d08f-21af-4280-80cb-5a4b94cbbfdf"),
+                            Id = new Guid("99db698a-7f61-4f10-9451-80904aa5cce2"),
                             Nome = "Rio de Janeiro",
                             Sigla = "RJ"
                         },
                         new
                         {
-                            Id = new Guid("ab339440-fcf6-4d55-8a00-b770983315e7"),
+                            Id = new Guid("351834e9-b5f4-4185-bc1c-ba8b23161ded"),
                             Nome = "Rio Grande do Norte",
                             Sigla = "RN"
                         },
                         new
                         {
-                            Id = new Guid("908e9d5b-adb4-4fe1-a1f1-a43fd9edd45a"),
+                            Id = new Guid("24031933-d6e0-4922-8f3e-0b3c30324593"),
                             Nome = "Rondônia",
                             Sigla = "RO"
                         },
                         new
                         {
-                            Id = new Guid("4e69a0ee-29dd-4907-b563-274f3a328213"),
+                            Id = new Guid("6734eec6-6ab0-4542-b4c0-a2ae82b3681e"),
                             Nome = "Roraima",
                             Sigla = "RR"
                         },
                         new
                         {
-                            Id = new Guid("c7ed87dd-5b5a-4a32-8883-65227707102d"),
+                            Id = new Guid("da74e75c-b523-46c2-bc69-bc3576cc1830"),
                             Nome = "Rio Grande do Sul",
                             Sigla = "RS"
                         },
                         new
                         {
-                            Id = new Guid("be66ac31-bb81-41a3-9156-cfaaa4ac7d1b"),
+                            Id = new Guid("9abe7da8-d0c8-4d27-b434-b3f10b03e1df"),
                             Nome = "Santa Catarina",
                             Sigla = "SC"
                         },
                         new
                         {
-                            Id = new Guid("4ec738db-7f80-4f8d-a405-b0db57c69741"),
+                            Id = new Guid("ff3df197-252c-424a-83ac-7fa5e059f2cc"),
                             Nome = "Sergipe",
                             Sigla = "SE"
                         },
                         new
                         {
-                            Id = new Guid("7090a315-b596-409c-82c1-63a0b87affab"),
-                            Nome = "Tocantins",
-                            Sigla = "TO"
-                        },
-                        new
-                        {
-                            Id = new Guid("7083a8c4-8061-463b-aa30-6da2e8313432"),
-                            Nome = "São Paulo",
-                            Sigla = "SP"
-                        },
-                        new
-                        {
-                            Id = new Guid("9a5a2382-72fd-4ee6-a0ca-e6d36e3adf39"),
-                            Nome = "Acre",
-                            Sigla = "AC"
-                        },
-                        new
-                        {
-                            Id = new Guid("6c59dab6-6c65-46db-985c-e15ad133584d"),
-                            Nome = "Alagoas",
-                            Sigla = "AL"
-                        },
-                        new
-                        {
-                            Id = new Guid("f05df1c4-7fde-4ce4-b6d3-20bbe2d271b2"),
-                            Nome = "Amapá",
-                            Sigla = "AP"
-                        },
-                        new
-                        {
-                            Id = new Guid("006dfedb-59bf-480b-a729-df147a6b0140"),
-                            Nome = "Bahia",
-                            Sigla = "BA"
-                        },
-                        new
-                        {
-                            Id = new Guid("ac617728-b7b3-4eaa-bdce-a816bbbdfe92"),
-                            Nome = "Ceará",
-                            Sigla = "CE"
-                        },
-                        new
-                        {
-                            Id = new Guid("62773405-ec05-44d4-810c-52f5f58b3930"),
-                            Nome = "Distrito Federal",
-                            Sigla = "DF"
-                        },
-                        new
-                        {
-                            Id = new Guid("608a5fc2-eb33-4037-8a3d-33d59f3328df"),
-                            Nome = "Espírito Santo",
-                            Sigla = "ES"
-                        },
-                        new
-                        {
-                            Id = new Guid("d953f227-b883-404d-91e4-98f6fbc67cba"),
-                            Nome = "Goiás",
-                            Sigla = "GO"
-                        },
-                        new
-                        {
-                            Id = new Guid("d5678d4b-990d-4462-b986-3a29e4932148"),
-                            Nome = "Maranhão",
-                            Sigla = "MA"
-                        },
-                        new
-                        {
-                            Id = new Guid("d0832955-b958-47c0-b012-d0f4a5adb869"),
-                            Nome = "Minas Gerais",
-                            Sigla = "MG"
-                        },
-                        new
-                        {
-                            Id = new Guid("dbb47c1e-134a-40b4-9024-b0fe681a60bb"),
-                            Nome = "Mato Grosso do Sul",
-                            Sigla = "MS"
-                        },
-                        new
-                        {
-                            Id = new Guid("bc396fca-d789-4d45-865c-3e5954b133bf"),
-                            Nome = "Mato Grosso",
-                            Sigla = "MT"
-                        },
-                        new
-                        {
-                            Id = new Guid("25617d1e-40ad-4987-8845-67b412778392"),
-                            Nome = "Pará",
-                            Sigla = "PA"
-                        },
-                        new
-                        {
-                            Id = new Guid("53137975-837c-42be-85fe-760c7e2f7dbf"),
-                            Nome = "Paraíba",
-                            Sigla = "PB"
-                        },
-                        new
-                        {
-                            Id = new Guid("b1e11699-ff52-42e8-a42c-99f3cce4248e"),
-                            Nome = "Pernambuco",
-                            Sigla = "PE"
-                        },
-                        new
-                        {
-                            Id = new Guid("88323fe1-5911-4dcb-bf6e-d6346e06d3fe"),
-                            Nome = "Piauí",
-                            Sigla = "PI"
-                        },
-                        new
-                        {
-                            Id = new Guid("fae35688-406c-4f8a-8adf-cc6c3eeabaf2"),
-                            Nome = "Paraná",
-                            Sigla = "PR"
-                        },
-                        new
-                        {
-                            Id = new Guid("2e96c9b9-2833-4af6-b846-a5ba6756b8ef"),
-                            Nome = "Rio de Janeiro",
-                            Sigla = "RJ"
-                        },
-                        new
-                        {
-                            Id = new Guid("cd965545-1174-436f-82a7-2988ae0b96c9"),
-                            Nome = "Rio Grande do Norte",
-                            Sigla = "RN"
-                        },
-                        new
-                        {
-                            Id = new Guid("d14c3217-6db4-4539-b41a-534eb29d57e6"),
-                            Nome = "Rondônia",
-                            Sigla = "RO"
-                        },
-                        new
-                        {
-                            Id = new Guid("4ecbff61-4990-4ff7-b12c-c95fe3ba64f3"),
-                            Nome = "Roraima",
-                            Sigla = "RR"
-                        },
-                        new
-                        {
-                            Id = new Guid("4633fbbb-4386-4890-9d83-39af790bc946"),
-                            Nome = "Rio Grande do Sul",
-                            Sigla = "RS"
-                        },
-                        new
-                        {
-                            Id = new Guid("f174fba6-bafc-42fe-8e78-02e05cb77c6b"),
-                            Nome = "Santa Catarina",
-                            Sigla = "SC"
-                        },
-                        new
-                        {
-                            Id = new Guid("969f1114-e73f-45e9-969c-1292fb9fd38c"),
-                            Nome = "Sergipe",
-                            Sigla = "SE"
-                        },
-                        new
-                        {
-                            Id = new Guid("a8700145-098d-46d0-913a-403ca65a89cc"),
+                            Id = new Guid("e5c4b9bd-812d-480f-b1ff-70fbcb0925ed"),
                             Nome = "Tocantins",
                             Sigla = "TO"
                         });

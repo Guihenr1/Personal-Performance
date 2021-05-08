@@ -23,7 +23,7 @@ namespace PP.Bff.Identidades.Extensions
 
             var token = _aspNetUser.ObterUserToken();
 
-            if (token != null) {
+            if (!string.IsNullOrWhiteSpace(token)) {
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
 

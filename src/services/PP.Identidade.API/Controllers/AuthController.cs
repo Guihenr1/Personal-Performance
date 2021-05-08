@@ -9,7 +9,7 @@ using PP.Identidade.API.Services;
 using PP.MessageBus;
 
 namespace PP.Identidade.API.Controllers {
-    [Route("api/identidade")]
+    [Route("identidade")]
     public class AuthController : MainController {
         private readonly AuthenticationService _authenticationService;
         private readonly IMessageBus _bus;

@@ -1,33 +1,27 @@
 ﻿using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using PP.Core.Communication;
+using RestSharp;
 
 namespace PP.Bff.Identidades.Services
 {
-    public abstract class Service {
-        protected StringContent ObterConteudo(object dado) {
-            return new StringContent(
+    public abstract class Service  {
+        protected RestRequest ObterConteudo(object dado) {
+            var response = new RestRequest();
+            response.AddParameter("application/json",
                 JsonSerializer.Serialize(dado),
-                Encoding.UTF8,
-                "application/json");
+                ParameterType.RequestBody);
+            return response;
         }
 
-        protected async Task<T> DeserializarObjetoResponse<T>(HttpResponseMessage responseMessage) {
+        protected async Task<T> DeserializarObjetoResponse<T>(string responseMessage) {
             var options = new JsonSerializerOptions {
                 PropertyNameCaseInsensitive = true
             };
 
-            return JsonSerializer.Deserialize<T>(await responseMessage.Content.ReadAsStringAsync(), options);
-        }
-
-        protected bool TratarErrosResponse(HttpResponseMessage response) {
-            if (response.StatusCode == HttpStatusCode.BadRequest) return false;
-
-            response.EnsureSuccessStatusCode();
-            return true;
+            return JsonSerializer.Deserialize<T>(responseMessage, options);
         }
 
         protected ResponseResult RetornoOk() {

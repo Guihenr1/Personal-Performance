@@ -1,16 +1,32 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PP.Bff.Identidades.Models;
+using PP.Bff.Identidades.Models.Enums;
+using PP.Bff.Identidades.Services;
 using PP.Core.Controllers;
 
 namespace PP.Bff.Identidades.Controllers {
-    [Authorize]
     [Route("autenticacao")]
-    public class AutenticacaoController : MainController {
-        [HttpGet]
-        public async Task<IActionResult> Autenticar()
+    public class AutenticacaoController : MainController
+    {
+        private readonly IIdentidadeService _identidadeService;
+        private readonly IPermissaoService _permissaoService;
+
+        public AutenticacaoController(IIdentidadeService identidadeService, IPermissaoService permissaoService)
         {
-            return CustomResponse();
+            _identidadeService = identidadeService;
+            _permissaoService = permissaoService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Autenticar(UsuarioLogin usuario)
+        {
+            var identidade = await _identidadeService.Autenticar(usuario);
+
+            if (identidade == null) AdicionarErroProcessamento("Usuario ou Senha incorretos");
+            else identidade.permissoes = await _permissaoService.ObterPermissao(TipoUsuario.Aluno, identidade.usuarioRespostaLogin.AccessToken);
+
+            return CustomResponse(identidade);
         }
     }
 }
