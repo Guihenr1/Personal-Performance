@@ -11,7 +11,8 @@ namespace PP.Aluno.API.Configuration
         public static void AddMessageBusConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMessageBus(configuration.GetMessageQueueConnection("MessageBus"))
-                .AddHostedService<RegistroAlunoIntegrationHandler>();
+                .AddHostedService<RegistroAlunoIntegrationHandler>()
+                .AddHostedService<RegistroProfessorIntegrationHandler>();
         }
     }
 }

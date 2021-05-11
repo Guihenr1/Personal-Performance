@@ -22,13 +22,21 @@ namespace PP.Usuario.API.Application.Commands.Professor {
         {
             if (!message.EhValido()) return message.ValidationResult;
 
-            var professor = new Models.Professor(Guid.NewGuid(), message.Nome, message.CREF, message.Email);
+            var professor = new Models.Professor(message.Id, message.Nome, message.CREF, message.Email);
 
             var professorExistente = await _professorRepository.ObterPorEmail(professor.Email.Endereco);
 
             if (professorExistente != null)
             {
                 AdicionarErro("Este e-mail já está em uso.");
+                return ValidationResult;
+            }
+
+            var crefExistente = await _professorRepository.ObterPorCREF(message.CREF);
+
+            if (crefExistente != null) 
+            {
+                AdicionarErro("Este CREF já está em uso.");
                 return ValidationResult;
             }
 
@@ -46,6 +54,13 @@ namespace PP.Usuario.API.Application.Commands.Professor {
 
             if (professorExistente != null && professor.Id != professorExistente.Id) {
                 AdicionarErro("Este e-mail já está em uso.");
+                return ValidationResult;
+            }
+
+            var crefExistente = await _professorRepository.ObterPorCREF(message.CREF);
+
+            if (crefExistente != null && professor.Id != crefExistente.Id) {
+                AdicionarErro("Este CREF já está em uso.");
                 return ValidationResult;
             }
 

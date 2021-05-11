@@ -27,15 +27,11 @@ namespace PP.Usuario.API {
         public void ConfigureServices(IServiceCollection services) {
             services.AddApiConfiguration(Configuration);
 
-            // services.AddJwtConfiguration(Configuration);
-
             services.AddSwaggerConfiguration();
 
             services.RegisterServices();
 
             services.AddMediatR(typeof(Startup));
-
-            services.AddControllers().AddNewtonsoftJson();
 
             services.AddMessageBusConfiguration(Configuration);
         }

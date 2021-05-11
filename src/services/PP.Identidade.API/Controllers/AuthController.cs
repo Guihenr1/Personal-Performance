@@ -50,6 +50,35 @@ namespace PP.Identidade.API.Controllers {
             return CustomResponse();
         }
 
+        [HttpPost("novo-professor")]
+        public async Task<ActionResult> Registrar(ProfessorRegistro professorRegistro) {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var user = new IdentityUser {
+                UserName = professorRegistro.Email,
+                Email = professorRegistro.Email,
+                EmailConfirmed = true
+            };
+
+            var result = await _authenticationService.UserManager.CreateAsync(user, professorRegistro.Senha);
+
+            if (result.Succeeded) {
+                var professorResult = await RegistrarProfessor(professorRegistro);
+                if (!professorResult.ValidationResult.IsValid) {
+                    await _authenticationService.UserManager.DeleteAsync(user);
+                    return CustomResponse(professorResult.ValidationResult);
+                }
+
+                return CustomResponse(await _authenticationService.GerarJwt(professorRegistro.Email));
+            }
+
+            foreach (var error in result.Errors) {
+                AdicionarErroProcessamento(error.Description);
+            }
+
+            return CustomResponse();
+        }
+
         [HttpPost("autenticar")]
         public async Task<ActionResult> Login(UsuarioLogin usuarioLogin) {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -84,6 +113,19 @@ namespace PP.Identidade.API.Controllers {
             catch
             {
                 await _authenticationService.UserManager.DeleteAsync(aluno);
+                throw;
+            }
+        }
+
+        private async Task<ResponseMessage> RegistrarProfessor(ProfessorRegistro professorRegistro) {
+            var professor = await _authenticationService.UserManager.FindByEmailAsync(professorRegistro.Email);
+            var professorRegistrado = new ProfessorRegistradoIntegrationEvent(Guid.Parse(professor.Id), 
+                professorRegistro.Nome, professorRegistro.CREF, professorRegistro.Email);
+
+            try {
+                return await _bus.RequestAsync<ProfessorRegistradoIntegrationEvent, ResponseMessage>(professorRegistrado);
+            } catch {
+                await _authenticationService.UserManager.DeleteAsync(professor);
                 throw;
             }
         }

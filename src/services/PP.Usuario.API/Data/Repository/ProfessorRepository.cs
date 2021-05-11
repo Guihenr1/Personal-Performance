@@ -38,6 +38,11 @@ namespace PP.Usuario.API.Data.Repository
             return _context.Professores.FirstOrDefaultAsync(a => a.Email.Endereco == email);
         }
 
+        public Task<Professor> ObterPorCREF(int cref) 
+        {
+            return _context.Professores.FirstOrDefaultAsync(a => a.CREF == cref);
+        }
+
         public Task<Professor> ObterPorId(Guid id) {
             return _context.Professores.FirstOrDefaultAsync(a => a.Id == id);
         }
