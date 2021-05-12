@@ -10,11 +10,11 @@
             </summary>
             <response code="204">Aluno atualizado com sucesso</response>
         </member>
-        <member name="M:PP.Usuario.API.Controllers.AlunoController.Index(System.Guid)">
+        <member name="M:PP.Usuario.API.Controllers.AlunoController.Index">
             <summary>
-            Exclui um aluno.
+            Obter todos os alunos.
             </summary>
-            <response code="204">Aluno excluido com sucesso</response>
+            <response code="200">Lista de alunos</response>
         </member>
     </members>
 </doc>

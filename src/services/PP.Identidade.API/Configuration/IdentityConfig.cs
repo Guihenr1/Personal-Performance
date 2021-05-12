@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NetDevPack.Security.JwtSigningCredentials;
 using PP.Identidade.API.Data;
 using PP.Identidade.API.Extensions;
+using PP.Identidade.API.Models;
 
 namespace PP.Identidade.API.Configuration {
     public static class IdentityConfig {
@@ -19,7 +20,7 @@ namespace PP.Identidade.API.Configuration {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<ApplicationUser>()
                 .AddRoles<IdentityRole>()
                 .AddErrorDescriber<IdentityMensagensPortugues>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

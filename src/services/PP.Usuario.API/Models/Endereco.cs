@@ -16,7 +16,6 @@ namespace PP.Usuario.API.Models
 
         [ForeignKey("Aluno")]
         public Guid AlunoId { get; set; }
-        public Aluno Aluno { get; set; }
         [ForeignKey("Estado")]
         public Guid EstadoId { get; set; }
         public Estado Estado { get; set; }

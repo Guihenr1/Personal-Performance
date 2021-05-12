@@ -50,9 +50,14 @@ namespace PP.Usuario.API.Models
             ProfessorId = professorId;
         }
 
-        public void ExcluirAluno() {
+        public void DesativarAluno() {
             DataExcluido = DateTime.Now;
             Excluido = true;
+        }
+
+        public void AtivarAluno() {
+            DataExcluido = null;
+            Excluido = false;
         }
     }
 }

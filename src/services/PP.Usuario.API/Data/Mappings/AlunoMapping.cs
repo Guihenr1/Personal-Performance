@@ -39,9 +39,6 @@ namespace PP.Usuario.API.Data.Mappings
                 .HasColumnName("Excluido")
                 .HasColumnType("bit");
 
-            builder.HasOne(c => c.Endereco)
-                .WithOne(a => a.Aluno);
-
             builder.HasOne(c => c.Professor)
                 .WithMany(a => a.Aluno);
 

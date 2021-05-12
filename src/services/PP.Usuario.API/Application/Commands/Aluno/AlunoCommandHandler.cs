@@ -11,7 +11,7 @@ namespace PP.Usuario.API.Application.Commands.Aluno {
     public class AlunoCommandHandler : CommandHandler, 
         IRequestHandler<RegistrarAlunoCommand, ValidationResult>,
         IRequestHandler<AtualizarAlunoCommand, ValidationResult>,
-        IRequestHandler<RemoverAlunoCommand, ValidationResult> {
+        IRequestHandler<AtivarDesativarAlunoCommand, ValidationResult> {
         private readonly IAlunoRepository _alunoRepository;
         private readonly IProfessorRepository _professorRepository;
 
@@ -85,7 +85,7 @@ namespace PP.Usuario.API.Application.Commands.Aluno {
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }
 
-        public async Task<ValidationResult> Handle(RemoverAlunoCommand message, CancellationToken cancellationToken) {
+        public async Task<ValidationResult> Handle(AtivarDesativarAlunoCommand message, CancellationToken cancellationToken) {
             if (!message.EhValido()) return message.ValidationResult;
 
             var aluno = await _alunoRepository.ObterPorId(message.Id);
@@ -95,8 +95,10 @@ namespace PP.Usuario.API.Application.Commands.Aluno {
                 return ValidationResult;
             }
 
-            aluno.ExcluirAluno();
-            _alunoRepository.Excluir(aluno);
+            if (aluno.Excluido) aluno.AtivarAluno(); 
+            else aluno.DesativarAluno();
+
+            _alunoRepository.SituacaoAluno(aluno);
 
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }

@@ -39,14 +39,14 @@ namespace PP.Usuario.API.Data.Repository
             _context.Entry(aluno.Endereco).Property(x => x.EstadoId).IsModified = true;
         }
 
-        public void Excluir(Models.Aluno aluno) {
+        public void SituacaoAluno(Models.Aluno aluno) {
             _context.Entry(aluno).Property(x => x.DataExcluido).IsModified = true;
             _context.Entry(aluno).Property(x => x.Excluido).IsModified = true;
         }
 
         public async Task<IEnumerable<Models.Aluno>> ObterTodos()
         {
-            return await _context.Alunos.AsNoTracking().ToListAsync();
+            return await _context.Alunos.Include(x => x.Endereco).AsNoTracking().ToListAsync();
         }
 
         public Task<Models.Aluno> ObterPorEmail(string email)

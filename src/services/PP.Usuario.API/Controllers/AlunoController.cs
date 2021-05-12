@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PP.Core.Controllers;
 using PP.Core.Mediator;
 using PP.Usuario.API.Application.Commands.Aluno;
+using PP.Usuario.API.Models;
+using PP.Usuario.API.ViewModels;
 
 namespace PP.Usuario.API.Controllers
 {
@@ -11,9 +16,13 @@ namespace PP.Usuario.API.Controllers
     public class AlunoController : MainController 
     {
         private readonly IMediatorHandler _mediatorHandler;
+        private readonly IAlunoRepository _alunoRepository;
+        private readonly IMapper _mapper;
 
-        public AlunoController(IMediatorHandler mediatorHandler) {
+        public AlunoController(IMediatorHandler mediatorHandler, IAlunoRepository alunoRepository, IMapper mapper) {
             _mediatorHandler = mediatorHandler;
+            _alunoRepository = alunoRepository;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -28,14 +37,14 @@ namespace PP.Usuario.API.Controllers
         }
 
         /// <summary>
-        /// Exclui um aluno.
+        /// Obter todos os alunos.
         /// </summary>
-        /// <response code="204">Aluno excluido com sucesso</response>
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Index(Guid id) {
-            var resultado = await _mediatorHandler.EnviarComando(new RemoverAlunoCommand(id));
-
-            return CustomResponse(resultado);
+        /// <response code="200">Lista de alunos</response>
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var alunos = await _alunoRepository.ObterTodos();
+            return CustomResponse(_mapper.Map<IEnumerable<AlunoViewModel>>(alunos));
         }
     }
 }

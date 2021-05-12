@@ -18,8 +18,8 @@ using PP.Identidade.API.Models;
 namespace PP.Identidade.API.Services
 {
     public class AuthenticationService {
-        public readonly SignInManager<IdentityUser> SignInManager;
-        public readonly UserManager<IdentityUser> UserManager;
+        public readonly SignInManager<ApplicationUser> SignInManager;
+        public readonly UserManager<ApplicationUser> UserManager;
         private readonly AppSettings _appSettings;
         private readonly AppTokenSettings _appTokenSettingsSettings;
         private readonly ApplicationDbContext _context;
@@ -28,8 +28,8 @@ namespace PP.Identidade.API.Services
         private readonly IAspNetUser _aspNetUser;
 
         public AuthenticationService(
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
             IOptions<AppSettings> appSettings,
             IOptions<AppTokenSettings> appTokenSettingsSettings,
             ApplicationDbContext context,
@@ -56,7 +56,7 @@ namespace PP.Identidade.API.Services
             return ObterRespostaToken(encodedToken, user, claims, refreshToken);
         }
 
-        private async Task<ClaimsIdentity> ObterClaimsUsuario(ICollection<Claim> claims, IdentityUser user) {
+        private async Task<ClaimsIdentity> ObterClaimsUsuario(ICollection<Claim> claims, ApplicationUser user) {
             var userRoles = await UserManager.GetRolesAsync(user);
 
             claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id));

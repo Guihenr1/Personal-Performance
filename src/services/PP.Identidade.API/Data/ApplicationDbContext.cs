@@ -5,7 +5,7 @@ using NetDevPack.Security.JwtSigningCredentials.Store.EntityFrameworkCore;
 using PP.Identidade.API.Models;
 
 namespace PP.Identidade.API.Data {
-    public class ApplicationDbContext : IdentityDbContext, ISecurityKeyContext {
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, ISecurityKeyContext {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         public DbSet<SecurityKeyWithPrivate> SecurityKeys { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
