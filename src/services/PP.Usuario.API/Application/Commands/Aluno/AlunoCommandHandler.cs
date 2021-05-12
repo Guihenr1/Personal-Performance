@@ -57,12 +57,28 @@ namespace PP.Usuario.API.Application.Commands.Aluno {
 
             var aluno = new Models.Aluno(message.Id, message.Nome, message.DataNascimento, message.Email);
 
-            var alunoExistente = await _alunoRepository.ObterPorEmail(aluno.Email.Endereco);
+            var alunoExistente = await _alunoRepository.ObterPorId(aluno.Id);
 
-            if (alunoExistente != null && aluno.Id != alunoExistente.Id) {
-                AdicionarErro("Este e-mail já está em uso.");
+            if (alunoExistente is null) {
+                AdicionarErro("Aluno não encontrado.");
                 return ValidationResult;
             }
+
+            if (aluno.Email.Endereco != alunoExistente.Email.Endereco) {
+                AdicionarErro("Não é permitido alteração de e-mail.");
+                return ValidationResult;
+            }
+
+            var professor = await _professorRepository.ObterPorId(message.ProfessorId);
+            if (professor == null) {
+                AdicionarErro("Professor não encontrado.");
+                return ValidationResult;
+            }
+
+            aluno.AtribuirEndereco(new Models.Endereco(
+                alunoExistente.EnderecoId, message.Cep, message.Logradouro, message.Numero, message.Bairro, message.Complemento, message.Cidade,
+                message.EstadoId, message.Id));
+            aluno.AtribuirProfessor(professor.Id);
 
             _alunoRepository.Atualizar(aluno);
 
@@ -80,7 +96,7 @@ namespace PP.Usuario.API.Application.Commands.Aluno {
             }
 
             aluno.ExcluirAluno();
-            _alunoRepository.Atualizar(aluno);
+            _alunoRepository.Excluir(aluno);
 
             return await PersistirDados(_alunoRepository.UnitOfWork);
         }

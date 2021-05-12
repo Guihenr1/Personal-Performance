@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PP.Core.Data;
@@ -25,7 +27,21 @@ namespace PP.Usuario.API.Data.Repository
 
         public void Atualizar(Models.Aluno aluno)
         {
-            _context.Entry(aluno.Id).CurrentValues.SetValues(aluno);
+            _context.Entry(aluno).Property(x => x.Nome).IsModified = true;
+            _context.Entry(aluno).Property(x => x.DataNascimento).IsModified = true;
+            _context.Entry(aluno).Property(x => x.ProfessorId).IsModified = true;
+            _context.Entry(aluno.Endereco).Property(x => x.Cep).IsModified = true;
+            _context.Entry(aluno.Endereco).Property(x => x.Logradouro).IsModified = true;
+            _context.Entry(aluno.Endereco).Property(x => x.Numero).IsModified = true;
+            _context.Entry(aluno.Endereco).Property(x => x.Bairro).IsModified = true;
+            _context.Entry(aluno.Endereco).Property(x => x.Cidade).IsModified = true;
+            _context.Entry(aluno.Endereco).Property(x => x.Complemento).IsModified = true;
+            _context.Entry(aluno.Endereco).Property(x => x.EstadoId).IsModified = true;
+        }
+
+        public void Excluir(Models.Aluno aluno) {
+            _context.Entry(aluno).Property(x => x.DataExcluido).IsModified = true;
+            _context.Entry(aluno).Property(x => x.Excluido).IsModified = true;
         }
 
         public async Task<IEnumerable<Models.Aluno>> ObterTodos()

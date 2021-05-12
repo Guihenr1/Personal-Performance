@@ -9,6 +9,7 @@ namespace PP.Usuario.API.Models
     {
         void Adicionar(Aluno aluno);
         void Atualizar(Aluno aluno);
+        void Excluir(Aluno aluno);
         Task<IEnumerable<Aluno>> ObterTodos();
         Task<Aluno> ObterPorEmail(string email);
         Task<Aluno> ObterPorId(Guid id);
