@@ -10,7 +10,7 @@ namespace PP.Usuario.API.Application.Commands.Professor {
     public class ProfessorCommandHandler : CommandHandler, 
         IRequestHandler<RegistrarProfessorCommand, ValidationResult>,
         IRequestHandler<AtualizarProfessorCommand, ValidationResult>,
-        IRequestHandler<RemoverProfessorCommand, ValidationResult> {
+        IRequestHandler<AtivarDesativarProfessorCommand, ValidationResult> {
         private readonly IProfessorRepository _professorRepository;
 
         public ProfessorCommandHandler(IProfessorRepository professorRepository)
@@ -50,10 +50,10 @@ namespace PP.Usuario.API.Application.Commands.Professor {
 
             var professor = new Models.Professor(message.Id, message.Nome, message.CREF, message.Email);
 
-            var professorExistente = await _professorRepository.ObterPorEmail(professor.Email.Endereco);
+            var professorExistente = await _professorRepository.ObterPorId(professor.Id);
 
-            if (professorExistente != null && professor.Id != professorExistente.Id) {
-                AdicionarErro("Este e-mail já está em uso.");
+            if (professorExistente is null) {
+                AdicionarErro("Professor não encontrado.");
                 return ValidationResult;
             }
 
@@ -64,12 +64,12 @@ namespace PP.Usuario.API.Application.Commands.Professor {
                 return ValidationResult;
             }
 
-            _professorRepository.Atualizar(professor);
+            _professorRepository.SituacaoProfessor(professor);
 
             return await PersistirDados(_professorRepository.UnitOfWork);
         }
 
-        public async Task<ValidationResult> Handle(RemoverProfessorCommand message, CancellationToken cancellationToken) {
+        public async Task<ValidationResult> Handle(AtivarDesativarProfessorCommand message, CancellationToken cancellationToken) {
             if (!message.EhValido()) return message.ValidationResult;
 
             var professor = await _professorRepository.ObterPorId(message.Id);
@@ -79,8 +79,8 @@ namespace PP.Usuario.API.Application.Commands.Professor {
                 return ValidationResult;
             }
 
-            professor.ExcluirProfessor();
-            _professorRepository.Atualizar(professor);
+            professor.AlternarSituacao();
+            _professorRepository.SituacaoProfessor(professor);
 
             return await PersistirDados(_professorRepository.UnitOfWork);
         }

@@ -29,12 +29,6 @@ namespace PP.Usuario.API.Application.Commands.Validations.Professor
                 .Length(2, 100).WithMessage("O nome deve ter entre 2 e 100 caracteres");
         }
 
-        protected void ValidateDataCadastro() {
-            RuleFor(a => a.DataCadastro)
-                .NotEmpty()
-                .WithMessage("Data cadastro do professor inválido");
-        }
-
         public static bool TerEmailValido(string email) {
             return Core.DomainObjects.Email.Validar(email);
         }

@@ -64,11 +64,6 @@ namespace PP.Usuario.API.Application.Commands.Aluno {
                 return ValidationResult;
             }
 
-            if (aluno.Email.Endereco != alunoExistente.Email.Endereco) {
-                AdicionarErro("Não é permitido alteração de e-mail.");
-                return ValidationResult;
-            }
-
             var professor = await _professorRepository.ObterPorId(message.ProfessorId);
             if (professor == null) {
                 AdicionarErro("Professor não encontrado.");
@@ -95,8 +90,7 @@ namespace PP.Usuario.API.Application.Commands.Aluno {
                 return ValidationResult;
             }
 
-            if (aluno.Excluido) aluno.AtivarAluno(); 
-            else aluno.DesativarAluno();
+            aluno.AlternarSituacao();
 
             _alunoRepository.SituacaoAluno(aluno);
 

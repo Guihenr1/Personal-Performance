@@ -8,6 +8,7 @@ namespace PP.Usuario.API.Application.Commands.Aluno
         public Guid Id { get; set; }
         public Guid ProfessorId { get; set; }
         public string Nome { get; set; }
+        [JsonIgnore]
         public string Email { get; set; }
         public DateTime DataNascimento { get; set; }
         [JsonIgnore]

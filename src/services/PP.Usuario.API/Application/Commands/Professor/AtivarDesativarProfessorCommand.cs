@@ -3,8 +3,8 @@ using PP.Usuario.API.Application.Commands.Validations.Professor;
 
 namespace PP.Usuario.API.Application.Commands.Professor
 {
-    public class RemoverProfessorCommand : ProfessorCommand {
-        public RemoverProfessorCommand(Guid id)
+    public class AtivarDesativarProfessorCommand : ProfessorCommand {
+        public AtivarDesativarProfessorCommand(Guid id)
         {
             Id = id;
         }

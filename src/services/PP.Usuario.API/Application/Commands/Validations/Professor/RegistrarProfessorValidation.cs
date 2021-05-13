@@ -9,7 +9,6 @@ namespace PP.Usuario.API.Application.Commands.Validations.Professor
             ValidateEmail();
             ValidateCREF();
             ValidateNome();
-            ValidateDataCadastro();
         }
     }
 }

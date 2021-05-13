@@ -16,5 +16,17 @@
             </summary>
             <response code="200">Lista de alunos</response>
         </member>
+        <member name="M:PP.Usuario.API.Controllers.ProfessorController.Index(PP.Usuario.API.Application.Commands.Professor.AtualizarProfessorCommand)">
+            <summary>
+            Atualiza um professor.
+            </summary>
+            <response code="204">Professor atualizado com sucesso</response>
+        </member>
+        <member name="M:PP.Usuario.API.Controllers.ProfessorController.Index">
+            <summary>
+            Obter todos os alunos.
+            </summary>
+            <response code="200">Lista de alunos</response>
+        </member>
     </members>
 </doc>

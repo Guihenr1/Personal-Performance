@@ -10,7 +10,6 @@ namespace PP.Usuario.API.Application.Commands.Professor
             Nome = nome;
             CREF = cref;
             Email = email;
-            DataCadastro = DateTime.Now;
         }
 
         public override bool EhValido() {

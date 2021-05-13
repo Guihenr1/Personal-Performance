@@ -23,9 +23,9 @@ namespace PP.Usuario.API.Data.Repository
             _context.Professores.Add(professor);
         }
 
-        public void Atualizar(Professor professor)
-        {
-            _context.Entry(professor.Id).CurrentValues.SetValues(professor);
+        public void SituacaoProfessor(Professor professor) {
+            _context.Entry(professor).Property(x => x.DataExcluido).IsModified = true;
+            _context.Entry(professor).Property(x => x.Excluido).IsModified = true;
         }
 
         public async Task<IEnumerable<Professor>> ObterTodos()

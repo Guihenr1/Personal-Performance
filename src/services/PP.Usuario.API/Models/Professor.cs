@@ -27,9 +27,14 @@ namespace PP.Usuario.API.Models
             Excluido = false;
         }
 
-        public void ExcluirProfessor()
-        {
-            Excluido = true;
+        public void AlternarSituacao() {
+            if (Excluido) {
+                DataExcluido = null;
+                Excluido = false;
+            } else {
+                DataExcluido = DateTime.Now;
+                Excluido = true;
+            }
         }
     }
 }

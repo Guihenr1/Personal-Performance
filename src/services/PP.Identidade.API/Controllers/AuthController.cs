@@ -92,15 +92,44 @@ namespace PP.Identidade.API.Controllers {
                 return CustomResponse();
             }
 
-            userRegister.IsActive = !userRegister.IsActive;
+            userRegister.AlternarAtivo();
             var result = await _authenticationService.UserManager.UpdateAsync(userRegister);
 
             if (result.Succeeded) {
                 var alunoResult = await SituacaoAluno(userRegister);
                 if (!alunoResult.ValidationResult.IsValid) {
-                    userRegister.IsActive = !userRegister.IsActive;
+                    userRegister.AlternarAtivo();
                     await _authenticationService.UserManager.UpdateAsync(userRegister);
                     return CustomResponse(alunoResult.ValidationResult);
+                }
+            }
+
+            foreach (var error in result.Errors) {
+                AdicionarErroProcessamento(error.Description);
+            }
+
+            return CustomResponse();
+        }
+
+        [HttpPut("alternar-situacao-professor/{id}")]
+        public async Task<ActionResult> AlternarSituacaoProfessor(Guid id) {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var userRegister = await _authenticationService.UserManager.FindByIdAsync(id.ToString());
+            if (userRegister == null) {
+                AdicionarErroProcessamento("Professor não encontrado");
+                return CustomResponse();
+            }
+
+            userRegister.IsActive = !userRegister.IsActive;
+            var result = await _authenticationService.UserManager.UpdateAsync(userRegister);
+
+            if (result.Succeeded) {
+                var professorResult = await SituacaoProfessor(userRegister);
+                if (!professorResult.ValidationResult.IsValid) {
+                    userRegister.AlternarAtivo();
+                    await _authenticationService.UserManager.UpdateAsync(userRegister);
+                    return CustomResponse(professorResult.ValidationResult);
                 }
             }
 
@@ -175,7 +204,19 @@ namespace PP.Identidade.API.Controllers {
             try {
                 return await _bus.RequestAsync<AlternarSituacaoAlunoIntegrationEvent, ResponseMessage>(alunoAlternado);
             } catch {
-                applicationUser.IsActive = !applicationUser.IsActive;
+                applicationUser.AlternarAtivo();
+                await _authenticationService.UserManager.UpdateAsync(applicationUser);
+                throw;
+            }
+        }
+
+        private async Task<ResponseMessage> SituacaoProfessor(ApplicationUser applicationUser) {
+            var professorAlternado = new AlternarSituacaoProfessorIntegrationEvent(Guid.Parse(applicationUser.Id));
+
+            try {
+                return await _bus.RequestAsync<AlternarSituacaoProfessorIntegrationEvent, ResponseMessage>(professorAlternado);
+            } catch {
+                applicationUser.AlternarAtivo();
                 await _authenticationService.UserManager.UpdateAsync(applicationUser);
                 throw;
             }
