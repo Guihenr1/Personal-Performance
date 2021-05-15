@@ -24,9 +24,9 @@
         </member>
         <member name="M:PP.Usuario.API.Controllers.ProfessorController.Index">
             <summary>
-            Obter todos os alunos.
+            Obter todos os professores
             </summary>
-            <response code="200">Lista de alunos</response>
+            <response code="200">Lista de professores</response>
         </member>
     </members>
 </doc>

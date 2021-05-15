@@ -18,6 +18,10 @@ namespace PP.Core.User
             return EstaAutenticado() ? Guid.Parse(_accessor.HttpContext.User.GetUserId()) : Guid.Empty;
         }
 
+        public string ObterTipo() {
+            return EstaAutenticado() ? _accessor.HttpContext.User.GetTypeUser() : "";
+        }
+
         public string ObterUserEmail() {
             return EstaAutenticado() ? _accessor.HttpContext.User.GetUserEmail() : "";
         }

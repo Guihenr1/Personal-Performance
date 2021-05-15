@@ -9,6 +9,7 @@ namespace PP.Core.User
         string Name { get; }
         Guid ObterUserId();
         string ObterUserEmail();
+        string ObterTipo();
         string ObterUserToken();
         string ObterUserRefreshToken();
         bool EstaAutenticado();

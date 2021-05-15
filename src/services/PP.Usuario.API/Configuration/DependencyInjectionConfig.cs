@@ -1,7 +1,9 @@
 ﻿using FluentValidation.Results;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using PP.Core.Mediator;
+using PP.Core.User;
 using PP.Usuario.API.Application.Commands.Aluno;
 using PP.Usuario.API.Application.Commands.AnamnesePergunta;
 using PP.Usuario.API.Application.Commands.AnamneseResposta;
@@ -12,7 +14,6 @@ using PP.Usuario.API.Application.Events.Aluno;
 using PP.Usuario.API.Data;
 using PP.Usuario.API.Data.Repository;
 using PP.Usuario.API.Models;
-using PP.Usuario.API.Services;
 
 namespace PP.Aluno.API.Configuration
 {
@@ -36,6 +37,9 @@ namespace PP.Aluno.API.Configuration
             services.AddScoped<IAnamneseRespostaRepository, AnamneseRespostaRepository>();
             services.AddScoped<IAnamnesePerguntaRepository, AnamnesePerguntaRepository>();
             services.AddScoped<UsuarioContext>();
+
+            services.AddScoped<IAspNetUser, AspNetUser>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
     }
 }

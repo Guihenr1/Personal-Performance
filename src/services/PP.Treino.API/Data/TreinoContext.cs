@@ -28,21 +28,6 @@ namespace PP.Treino.API.Data
                 .HasIndex(c => c.TreinoId)
                 .HasName("IDX_Treino");
 
-            modelBuilder.Entity<Exercicio>()
-                .HasMany(c => c.ExercicioTreino)
-                .WithOne(i => i.Exercicio)
-                .HasForeignKey(c => c.ExercicioId);
-
-            modelBuilder.Entity<Repeticao>()
-                .HasMany(c => c.ExercicioTreino)
-                .WithOne(i => i.Repeticao)
-                .HasForeignKey(c => c.RepeticaoId);
-
-            modelBuilder.Entity<Models.Treino>()
-                .HasMany(c => c.ExercicioTreino)
-                .WithOne(i => i.Treino)
-                .HasForeignKey(c => c.TreinoId);
-
             foreach (var relationship in modelBuilder.Model.GetEntityTypes()
                 .SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.Cascade;
         }

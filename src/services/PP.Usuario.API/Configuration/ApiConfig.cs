@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PP.Core.Identidade;
 using PP.Usuario.API.Data;
 
 namespace PP.Aluno.API.Configuration
@@ -36,7 +37,7 @@ namespace PP.Aluno.API.Configuration
 
             app.UseCors("Total");
 
-            //app.UseAuthConfiguration();
+            app.UseAuthConfiguration();
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();

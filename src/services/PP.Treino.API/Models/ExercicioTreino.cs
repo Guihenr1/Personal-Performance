@@ -19,9 +19,5 @@ namespace PP.Treino.API.Models
         }
 
         public ExercicioTreino() {}
-
-        public Exercicio Exercicio { get; set; }
-        public Repeticao Repeticao { get; set; }
-        public Treino Treino { get; set; }
     }
 }

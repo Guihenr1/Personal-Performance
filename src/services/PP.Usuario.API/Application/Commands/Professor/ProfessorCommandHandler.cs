@@ -64,7 +64,7 @@ namespace PP.Usuario.API.Application.Commands.Professor {
                 return ValidationResult;
             }
 
-            _professorRepository.SituacaoProfessor(professor);
+            _professorRepository.Atualizar(professor);
 
             return await PersistirDados(_professorRepository.UnitOfWork);
         }

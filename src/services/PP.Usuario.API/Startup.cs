@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PP.Aluno.API.Configuration;
+using PP.Core.Identidade;
 
 namespace PP.Usuario.API {
     public class Startup {
@@ -26,6 +27,8 @@ namespace PP.Usuario.API {
 
         public void ConfigureServices(IServiceCollection services) {
             services.AddApiConfiguration(Configuration);
+
+            services.AddJwtConfiguration(Configuration);
 
             services.AddSwaggerConfiguration();
 

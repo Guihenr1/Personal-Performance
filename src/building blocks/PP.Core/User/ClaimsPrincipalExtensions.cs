@@ -22,6 +22,15 @@ namespace PP.Core.User
             return claim?.Value;
         }
 
+        public static string GetTypeUser(this ClaimsPrincipal principal) {
+            if (principal == null) {
+                throw new ArgumentException(nameof(principal));
+            }
+
+            var claim = principal.FindFirst("UserType");
+            return claim?.Value;
+        }
+
         public static string GetUserToken(this ClaimsPrincipal principal) {
             if (principal == null) {
                 throw new ArgumentException(nameof(principal));

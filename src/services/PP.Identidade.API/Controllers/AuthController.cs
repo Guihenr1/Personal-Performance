@@ -1,32 +1,43 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PP.Core.Controllers;
+using PP.Core.DomainObjects;
+using PP.Core.Enums;
 using PP.Core.Messages.Integration;
+using PP.Core.User;
 using PP.Identidade.API.Models;
 using PP.Identidade.API.Services;
 using PP.MessageBus;
 
 namespace PP.Identidade.API.Controllers {
+    [Authorize]
     [Route("identidade")]
     public class AuthController : MainController {
+        private readonly IAspNetUser _user;
         private readonly AuthenticationService _authenticationService;
         private readonly IMessageBus _bus;
 
         public AuthController(AuthenticationService authenticationService,
-                              IMessageBus bus) {
+                              IMessageBus bus, IAspNetUser user) {
             _authenticationService = authenticationService;
             _bus = bus;
+            _user = user;
         }
 
         [HttpPost("novo-aluno")]
-        public async Task<ActionResult> Registrar(AlunoRegistro alunoRegistro) {
+        public async Task<ActionResult> Registrar(AlunoRegistro alunoRegistro)
+        {
+            EhAdmin();
+
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var user = new ApplicationUser {
                 UserName = alunoRegistro.Email,
                 Email = alunoRegistro.Email,
+                UserType = TipoUsuario.Aluno,
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -53,11 +64,14 @@ namespace PP.Identidade.API.Controllers {
 
         [HttpPost("novo-professor")]
         public async Task<ActionResult> Registrar(ProfessorRegistro professorRegistro) {
+            EhAdmin();
+
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var user = new ApplicationUser {
                 UserName = professorRegistro.Email,
                 Email = professorRegistro.Email,
+                UserType = TipoUsuario.Professor,
                 EmailConfirmed = true,
                 IsActive = true
             };
@@ -83,6 +97,8 @@ namespace PP.Identidade.API.Controllers {
 
         [HttpPut("alternar-situacao-aluno/{id}")]
         public async Task<ActionResult> AlternarSituacaoAluno(Guid id) {
+            EhAdmin();
+
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var userRegister = await _authenticationService.UserManager.FindByIdAsync(id.ToString());
@@ -113,6 +129,8 @@ namespace PP.Identidade.API.Controllers {
 
         [HttpPut("alternar-situacao-professor/{id}")]
         public async Task<ActionResult> AlternarSituacaoProfessor(Guid id) {
+            EhAdmin();
+
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var userRegister = await _authenticationService.UserManager.FindByIdAsync(id.ToString());
@@ -140,6 +158,7 @@ namespace PP.Identidade.API.Controllers {
             return CustomResponse();
         }
 
+        [AllowAnonymous]
         [HttpPost("autenticar")]
         public async Task<ActionResult> Login(UsuarioLogin usuarioLogin) {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -240,6 +259,11 @@ namespace PP.Identidade.API.Controllers {
             var user = await _authenticationService.UserManager.FindByEmailAsync(email);
 
             return !user.IsActive;
+        }
+
+        private void EhAdmin()
+        {
+            if (!Equals(Enum.Parse<TipoUsuario>(_user.ObterTipo()), TipoUsuario.Admin)) throw new DomainException("Somente administradores podem realizar essa tarefa");
         }
     }
 }

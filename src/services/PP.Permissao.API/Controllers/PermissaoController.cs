@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PP.Core.Enums;
 using PP.Core.User;
 using PP.Permissao.API.Data;
-using PP.Permissao.API.Models.Enums;
 
 namespace PP.Permissao.API.Controllers {
     [Authorize]

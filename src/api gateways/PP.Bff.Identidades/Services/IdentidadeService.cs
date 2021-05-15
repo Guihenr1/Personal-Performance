@@ -9,7 +9,7 @@ using RestSharp;
 namespace PP.Bff.Identidades.Services {
     public interface IIdentidadeService
     {
-        Task<AutenticacaoDTO> Autenticar(UsuarioLogin usuario);
+        Task<AutenticacaoViewModel> Autenticar(UsuarioLogin usuario);
     }
 
     public class IdentidadeService : Service, IIdentidadeService {
@@ -19,17 +19,22 @@ namespace PP.Bff.Identidades.Services {
             _client = new RestClient(settings.Value.IdentidadeUrl);
         }
 
-        public async Task<AutenticacaoDTO> Autenticar(UsuarioLogin usuario)
+        public async Task<AutenticacaoViewModel> Autenticar(UsuarioLogin usuario)
         {
-            var response = new AutenticacaoDTO();
+            var response = new AutenticacaoViewModel();
             var body = ObterConteudo(usuario);
 
             var request = new RestRequest("/identidade/autenticar/", Method.POST);
             request.AddParameter(body.Parameters.FirstOrDefault());
             var identidade = await _client.ExecuteAsync(request);
-            if (identidade.StatusCode != HttpStatusCode.OK) return null;
+            if (identidade.StatusCode != HttpStatusCode.OK) {
+                var errors = await DeserializarObjetoResponse<ErrorResponse>(identidade?.Content);
+                response.Errors.AddRange(errors.Errors.Mensagens);
 
-            response.usuarioRespostaLogin = await DeserializarObjetoResponse<UsuarioRespostaLoginDTO>(identidade?.Content);
+                return response;
+            }
+
+            response.usuarioRespostaLogin = await DeserializarObjetoResponse<UsuarioRespostaLoginViewModel>(identidade?.Content);
 
             return response;
         }

@@ -1,5 +1,5 @@
 ﻿using System;
-using PP.Permissao.API.Models.Enums;
+using PP.Core.Enums;
 
 namespace PP.Permissao.API.Models
 {

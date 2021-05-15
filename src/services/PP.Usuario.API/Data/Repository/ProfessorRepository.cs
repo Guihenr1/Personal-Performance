@@ -47,6 +47,11 @@ namespace PP.Usuario.API.Data.Repository
             return _context.Professores.FirstOrDefaultAsync(a => a.Id == id);
         }
 
+        public void Atualizar(Professor professor) {
+            _context.Entry(professor).Property(x => x.Nome).IsModified = true;
+            _context.Entry(professor).Property(x => x.CREF).IsModified = true;
+        }
+
         public void Dispose() {
             _context.Dispose();
         }
