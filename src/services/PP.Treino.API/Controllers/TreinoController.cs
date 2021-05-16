@@ -8,8 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using PP.Core.Controllers;
 using PP.Core.DomainObjects;
 using PP.Core.Enums;
+using PP.Core.Messages.Integration;
 using PP.Core.User;
 using PP.Treino.API.Data;
+using PP.Treino.API.Data.Repositories;
+using PP.Treino.API.DTO;
 using PP.Treino.API.Models;
 using PP.Treino.API.ViewModels;
 
@@ -21,23 +24,32 @@ namespace PP.Treino.API.Controllers
     {
         private readonly IAspNetUser _user;
         private readonly TreinoContext _context;
+        private readonly ITreinoRepository _repository;
 
-        public TreinoController(IAspNetUser user, TreinoContext context)
+        public TreinoController(IAspNetUser user, TreinoContext context, ITreinoRepository repository)
         {
             _user = user;
             _context = context;
+            _repository = repository;
         }
 
-        [HttpGet]
-        public async Task<List<Models.Treino>> ObterTreinos() {
-            return await _context.Treino.Include(x => x.ExercicioTreino)
-                       .Where(x => x.AlunoId == _user.ObterUserId()).ToListAsync();
+        [HttpGet("treinos-professor")]
+        public async Task<IEnumerable<TreinoDTO>> ObterTreinosAlunosProfessor() {
+            EhProfessor();
+
+            return await _repository.ObterTreinosAlunosProfessor(_user.ObterUserId());
         }
 
-        [HttpGet("{id}")]
-        public async Task<Models.Treino> ObterTreinoPoId(Guid id) {
-            return await _context.Treino.Include(x => x.ExercicioTreino)
-                .FirstOrDefaultAsync(x => x.AlunoId == _user.ObterUserId() && x.Id == id);
+        [HttpGet("treinos-aluno")]
+        public async Task<IEnumerable<TreinoDTO>> ObterTreinosAluno()
+        {
+            return await _repository.ObterTreinosAluno(_user.ObterUserId());
+        }
+
+        [HttpGet("treino-id/{id}")]
+        public async Task<TreinoDTO> ObterTreinoPoId(Guid id)
+        {
+            return await _repository.ObterTreinoPoId(id);
         }
 
         [HttpPost]
@@ -48,35 +60,31 @@ namespace PP.Treino.API.Controllers
             if (!treino.EhValido()) return CustomResponse();
 
             var treinoId = Guid.NewGuid();
-            _context.Treino.Add(new Models.Treino(treinoId, treino.AlunoId,
-                treino.ExercicioTreino.Select(x =>
-                    new ExercicioTreino(x.ExercicioId, treinoId, x.RepeticaoId)).ToList()));
 
-            await PersistirDados();
+            await _repository.AdicionarTreino(new Models.Treino(treinoId, treino.AlunoId,
+                treino.ExercicioTreino.Select(x =>
+                    new ExercicioTreino(Guid.NewGuid(), x.ExercicioId, treinoId, x.RepeticaoId)).ToList()));
+
             return CustomResponse();
         }
 
         [HttpPut("{treinoId}")]
-        public async Task<IActionResult> AtualizarTreino(Guid treinoId, Models.Treino treino) {
+        public async Task<IActionResult> AtualizarTreino(TreinoViewModel treino, Guid treinoId) {
             EhProfessor();
 
-            // if (!treino.EhValido()) return CustomResponse();
+            if (!treino.EhValido()) return CustomResponse();
 
-            treino.Id = treinoId;
-            _context.Treino.Update(treino);
+            await _repository.AtualizarTreino(new Models.Treino(treinoId, treino.AlunoId,
+                treino.ExercicioTreino.Select(x =>
+                    new ExercicioTreino(x.Id, x.ExercicioId, treinoId, x.RepeticaoId)).ToList()));
 
-            await PersistirDados();
             return CustomResponse();
-        }
-
-        private async Task PersistirDados() {
-            var result = await _context.SaveChangesAsync();
-            if (result <= 0) AdicionarErroProcessamento("Não foi possível persistir os dados no banco");
         }
 
         private void EhProfessor()
         {
-            if (Equals(_user.ObterTipo(), TipoUsuario.Professor)) throw new DomainException("Somente professores podem cadastrar treinos");
+            if (Equals(Enum.Parse<TipoUsuario>(_user.ObterTipo()), TipoUsuario.Professor)) 
+                throw new DomainException("Acesso permitido somente a professores");
         }
     }
 }

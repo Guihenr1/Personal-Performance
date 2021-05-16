@@ -10,9 +10,9 @@ namespace PP.Treino.API.Models
         public Guid TreinoId { get; set; }
         public Guid RepeticaoId { get; set; }
 
-        public ExercicioTreino(Guid exercicioId, Guid treinoId, Guid repeticaoId)
+        public ExercicioTreino(Guid id, Guid exercicioId, Guid treinoId, Guid repeticaoId)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             ExercicioId = exercicioId;
             TreinoId = treinoId;
             RepeticaoId = repeticaoId;

@@ -4,6 +4,7 @@ using FluentValidation;
 namespace PP.Treino.API.ViewModels
 {
     public class ExercicioTreinoViewModel {
+        public Guid Id { get; set; }
         public Guid ExercicioId { get; set; }
         public Guid RepeticaoId { get; set; }
 
