@@ -25,10 +25,10 @@ namespace PP.Bff.Identidades.Controllers {
             var identidade = await _identidadeService.Autenticar(usuario);
 
             if (identidade.Errors.Any()) identidade.Errors.ForEach(AdicionarErroProcessamento);
-            else identidade.permissoes = await _permissaoService.ObterPermissao(
-                Enum.Parse<TipoUsuario>(identidade.usuarioRespostaLogin.UsuarioToken
+            else identidade.Permissoes = await _permissaoService.ObterPermissao(
+                Enum.Parse<TipoUsuario>(identidade.UsuarioRespostaLogin.UsuarioToken
                     .Claims.First(x => x.Type == "UserType").Value), 
-                identidade.usuarioRespostaLogin.AccessToken);
+                identidade.UsuarioRespostaLogin.AccessToken);
 
             return CustomResponse(identidade);
         }

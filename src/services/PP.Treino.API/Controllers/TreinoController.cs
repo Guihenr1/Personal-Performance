@@ -23,13 +23,11 @@ namespace PP.Treino.API.Controllers
     public class TreinoController : MainController
     {
         private readonly IAspNetUser _user;
-        private readonly TreinoContext _context;
         private readonly ITreinoRepository _repository;
 
-        public TreinoController(IAspNetUser user, TreinoContext context, ITreinoRepository repository)
+        public TreinoController(IAspNetUser user, ITreinoRepository repository)
         {
             _user = user;
-            _context = context;
             _repository = repository;
         }
 

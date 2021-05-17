@@ -1,5 +1,5 @@
 ﻿using System;
-using FluentValidation;
+using System.Collections.Generic;
 
 namespace PP.Treino.API.Models
 {
@@ -9,6 +9,7 @@ namespace PP.Treino.API.Models
         public Guid ExercicioId { get; set; }
         public Guid TreinoId { get; set; }
         public Guid RepeticaoId { get; set; }
+        public List<ExercicioCarga> ExercicioCarga { get; set; } = new List<ExercicioCarga>();
 
         public ExercicioTreino(Guid id, Guid exercicioId, Guid treinoId, Guid repeticaoId)
         {

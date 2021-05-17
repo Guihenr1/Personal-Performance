@@ -16,6 +16,7 @@ namespace PP.Treino.API.Data
         public DbSet<Exercicio> Exercicio { get; set; }
         public DbSet<Repeticao> Repeticao { get; set; }
         public DbSet<Models.Treino> Treino { get; set; }
+        public DbSet<ExercicioCarga> ExercicioCarga { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
@@ -23,6 +24,10 @@ namespace PP.Treino.API.Data
                 property.SetColumnType("varchar(100)");
 
             modelBuilder.Ignore<ValidationResult>();
+
+            modelBuilder.Entity<ExercicioCarga>()
+                .HasOne(p => p.ExercicioTreino)
+                .WithMany(b => b.ExercicioCarga);
 
             modelBuilder.Entity<ExercicioTreino>()
                 .HasIndex(c => c.TreinoId)

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PP.Core.Identidade;
 using PP.Identidade.API.Configuration;
+using PP.Identidade.API.Services;
 
 namespace PP.Identidade.API {
     public class Startup {
@@ -35,22 +36,6 @@ namespace PP.Identidade.API {
 
             services.AddMessageBusConfiguration(Configuration);
         }
-
-        //public void ConfigureServices(IServiceCollection services) {
-        //    services.AddApiConfiguration(Configuration);
-
-        //    services.AddJwtConfiguration(Configuration);
-
-        //    services.AddSwaggerConfiguration();
-
-        //    services.RegisterServices();
-        //}
-
-        //public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
-        //    app.UseSwaggerConfiguration();
-
-        //    app.UseApiConfiguration(env);
-        //}
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             app.UseSwaggerConfiguration();

@@ -11,7 +11,6 @@ using PP.Treino.API.DTO;
 namespace PP.Treino.API.Data.Repositories
 {
     public interface ITreinoRepository {
-        DbConnection ObterConexao();
         Task<IEnumerable<TreinoDTO>> ObterTreinosAluno(Guid alunoId);
         Task<IEnumerable<TreinoDTO>> ObterTreinosAlunosProfessor(Guid professorId);
         Task<TreinoDTO> ObterTreinoPoId(Guid treinoId);
@@ -26,7 +25,7 @@ namespace PP.Treino.API.Data.Repositories
             _context = context;
         }
 
-        public DbConnection ObterConexao() => _context.Database.GetDbConnection();
+        DbConnection ObterConexao() => _context.Database.GetDbConnection();
         public async Task<IEnumerable<TreinoDTO>> ObterTreinosAluno(Guid alunoId)
         {
             const string sql = @"SELECT t.Id TreinoId, t.AlunoId, t.DataCadastro, 

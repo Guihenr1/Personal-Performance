@@ -34,7 +34,7 @@ namespace PP.Bff.Identidades.Services {
                 return response;
             }
 
-            response.usuarioRespostaLogin = await DeserializarObjetoResponse<UsuarioRespostaLoginViewModel>(identidade?.Content);
+            response.UsuarioRespostaLogin = await DeserializarObjetoResponse<UsuarioRespostaLoginViewModel>(identidade?.Content);
 
             return response;
         }
