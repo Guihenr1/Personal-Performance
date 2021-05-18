@@ -1,8 +1,8 @@
 ﻿namespace PP.Core.Enums
 {
     public enum TipoUsuario {
-        Professor = 0,
-        Aluno = 1,
-        Admin = 2
+        Professor = 1,
+        Aluno = 2,
+        Administrador = 3
     }
 }

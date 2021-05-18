@@ -27,11 +27,40 @@ namespace PP.Identidade.API.Controllers {
             _user = user;
         }
 
+        [AllowAnonymous]
+        [HttpPost("novo-administrador")]
+        public async Task<ActionResult> Registrar(AdministradorRegistro administradorRegistro) {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var administrador = await _authenticationService.UserManager.FindByEmailAsync(administradorRegistro.Email);
+
+            if (administrador != null)
+            {
+                AdicionarErroProcessamento("E-mail já está em uso");
+                return CustomResponse();
+            }
+
+            var user = new ApplicationUser {
+                UserName = administradorRegistro.Email,
+                Email = administradorRegistro.Email,
+                UserType = TipoUsuario.Administrador,
+                EmailConfirmed = true,
+                IsActive = true
+            };
+
+            var result = await _authenticationService.UserManager.CreateAsync(user, administradorRegistro.Senha);
+
+            foreach (var error in result.Errors) {
+                AdicionarErroProcessamento(error.Description);
+            }
+
+            return CustomResponse();
+        }
+
+        [AllowAnonymous]
         [HttpPost("novo-aluno")]
         public async Task<ActionResult> Registrar(AlunoRegistro alunoRegistro)
         {
-            EhAdmin();
-
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var user = new ApplicationUser {
@@ -52,7 +81,7 @@ namespace PP.Identidade.API.Controllers {
                     return CustomResponse(alunoResult.ValidationResult);
                 }
 
-                return CustomResponse(await _authenticationService.GerarJwt(alunoRegistro.Email));
+                return CustomResponse();
             }
 
             foreach (var error in result.Errors) {
@@ -85,7 +114,7 @@ namespace PP.Identidade.API.Controllers {
                     return CustomResponse(professorResult.ValidationResult);
                 }
 
-                return CustomResponse(await _authenticationService.GerarJwt(professorRegistro.Email));
+                return CustomResponse();
             }
 
             foreach (var error in result.Errors) {
@@ -263,7 +292,7 @@ namespace PP.Identidade.API.Controllers {
 
         private void EhAdmin()
         {
-            if (!Equals(Enum.Parse<TipoUsuario>(_user.ObterTipo()), TipoUsuario.Admin)) throw new DomainException("Somente administradores podem realizar essa tarefa");
+            if (!Equals(Enum.Parse<TipoUsuario>(_user.ObterTipo()), TipoUsuario.Administrador)) throw new DomainException("Somente administradores podem realizar essa tarefa");
         }
     }
 }

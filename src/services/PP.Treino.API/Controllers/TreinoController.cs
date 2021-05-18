@@ -81,7 +81,7 @@ namespace PP.Treino.API.Controllers
 
         private void EhProfessor()
         {
-            if (Equals(Enum.Parse<TipoUsuario>(_user.ObterTipo()), TipoUsuario.Professor)) 
+            if (!Equals(Enum.Parse<TipoUsuario>(_user.ObterTipo()), TipoUsuario.Professor)) 
                 throw new DomainException("Acesso permitido somente a professores");
         }
     }

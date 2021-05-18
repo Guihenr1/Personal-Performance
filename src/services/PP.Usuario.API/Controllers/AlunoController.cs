@@ -59,7 +59,7 @@ namespace PP.Usuario.API.Controllers {
         }
 
         private void EhAdmin() {
-            if (!Equals(Enum.Parse<TipoUsuario>(_user.ObterTipo()), TipoUsuario.Admin)) throw new DomainException("Somente administradores podem realizar essa tarefa");
+            if (!Equals(Enum.Parse<TipoUsuario>(_user.ObterTipo()), TipoUsuario.Administrador)) throw new DomainException("Somente administradores podem realizar essa tarefa");
         }
 
         private void EhUsuarioLogado(Guid usuarioId)
