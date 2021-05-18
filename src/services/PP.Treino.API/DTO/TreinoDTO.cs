@@ -7,6 +7,7 @@ namespace PP.Treino.API.DTO
         public Guid Id { get; set; }
         public Guid AlunoId { get; set; }
         public DateTime DataCadastro { get; set; }
+        public string Nome { get; set; }
         public List<ExercicioTreinoDTO> ExercicioTreino { get; set; }
     }
 }

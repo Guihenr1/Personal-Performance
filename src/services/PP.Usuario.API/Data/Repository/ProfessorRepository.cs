@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PP.Core.Data;
@@ -28,9 +28,16 @@ namespace PP.Usuario.API.Data.Repository
             _context.Entry(professor).Property(x => x.Excluido).IsModified = true;
         }
 
-        public async Task<IEnumerable<Professor>> ObterTodos()
-        {
-            return await _context.Professores.AsNoTracking().ToListAsync();
+        public async Task<PagedResult<Professor>> ObterTodos(int pageSize, int pageIndex) {
+            var professores = await _context.Professores.AsNoTracking()
+                .Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToListAsync();
+
+            return new PagedResult<Professor> {
+                List = professores,
+                TotalResults = await _context.Professores.CountAsync(),
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
         }
 
         public Task<Professor> ObterPorEmail(string email)

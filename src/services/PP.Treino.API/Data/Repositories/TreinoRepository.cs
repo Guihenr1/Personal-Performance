@@ -7,53 +7,80 @@ using System.Transactions;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
 using PP.Treino.API.DTO;
+using PP.Treino.API.Models;
 
 namespace PP.Treino.API.Data.Repositories
 {
     public interface ITreinoRepository {
-        Task<IEnumerable<TreinoDTO>> ObterTreinosAluno(Guid alunoId);
-        Task<IEnumerable<TreinoDTO>> ObterTreinosAlunosProfessor(Guid professorId);
-        Task<TreinoDTO> ObterTreinoPoId(Guid treinoId);
+        Task<PagedResult<TreinoDTO>> ObterTreinosAluno(Guid alunoId, int pageSize, int pageIndex);
+        Task<PagedResult<TreinoDTO>> ObterTreinosAlunosProfessor(Guid professorId, int pageSize, int pageIndex);
+        Task<TreinoDTO> ObterTreinoPorId(Guid treinoId);
         Task AdicionarTreino(Models.Treino treino);
         Task AtualizarTreino(Models.Treino treino);
     }
 
     public class TreinoRepository : ITreinoRepository {
         private readonly TreinoContext _context;
+        private readonly IExercicioTreinoRepository _exercicioTreinoRepository;
 
-        public TreinoRepository(TreinoContext context) {
+        public TreinoRepository(TreinoContext context, IExercicioTreinoRepository exercicioTreinoRepository)
+        {
             _context = context;
+            _exercicioTreinoRepository = exercicioTreinoRepository;
         }
 
         DbConnection ObterConexao() => _context.Database.GetDbConnection();
-        public async Task<IEnumerable<TreinoDTO>> ObterTreinosAluno(Guid alunoId)
+        public async Task<PagedResult<TreinoDTO>> ObterTreinosAluno(Guid alunoId, int pageSize, int pageIndex)
         {
-            const string sql = @"SELECT t.Id TreinoId, t.AlunoId, t.DataCadastro, 
-                                et.Id ExercicioTreinoId, et.ExercicioId, et.TreinoId ExercicioTreino_TreinoId, et.RepeticaoId FROM Treino t 
-                                JOIN ExercicioTreino et ON t.Id = et.TreinoId
-                                WHERE t.AlunoId = @alunoId
-                                ORDER BY t.DataCadastro DESC";
+            var sql = @$"SELECT t.Id, t.AlunoId, t.DataCadastro, t.Nome 
+                                FROM Treino t 
+                                JOIN Aluno a ON a.Id = t.AlunoId 
+                                WHERE t.AlunoId = @alunoId 
+                                ORDER BY t.DataCadastro DESC
+                                OFFSET {pageSize * (pageIndex - 1)} ROWS 
+                                FETCH NEXT {pageSize} ROWS ONLY 
+                                SELECT COUNT(Id) FROM Treino";
 
-            var treinos = await ObterConexao().QueryAsync<dynamic>(sql, new { alunoId });
+            var multi = await ObterConexao()
+                .QueryMultipleAsync(sql, new { alunoId });
 
-            return MapearTreino(treinos);
+            var treinos = multi.Read<TreinoDTO>();
+            var total = multi.Read<int>().FirstOrDefault();
+
+            return new PagedResult<TreinoDTO>() {
+                List = treinos,
+                TotalResults = total,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
         }
 
-        public async Task<IEnumerable<TreinoDTO>> ObterTreinosAlunosProfessor(Guid professorId) {
-            const string sql = @"SELECT t.Id TreinoId, t.AlunoId, t.DataCadastro, 
-                                et.Id ExercicioTreinoId, et.ExercicioId, et.TreinoId ExercicioTreino_TreinoId, et.RepeticaoId FROM Treino t 
-                                JOIN ExercicioTreino et ON t.Id = et.TreinoId
+        public async Task<PagedResult<TreinoDTO>> ObterTreinosAlunosProfessor(Guid professorId, int pageSize, int pageIndex) {
+            var sql = @$"SELECT t.Id, t.AlunoId, t.DataCadastro, t.Nome 
+                                FROM Treino t 
                                 JOIN Aluno a ON a.Id = t.AlunoId
                                 WHERE a.ProfessorId = @professorId 
-                                ORDER BY t.DataCadastro DESC";
+                                ORDER BY t.DataCadastro DESC
+                                OFFSET {pageSize * (pageIndex - 1)} ROWS 
+                                FETCH NEXT {pageSize} ROWS ONLY 
+                                SELECT COUNT(Id) FROM Treino";
 
-            var treinos = await ObterConexao().QueryAsync<dynamic>(sql, new { professorId });
+            var multi = await ObterConexao()
+                .QueryMultipleAsync(sql, new { professorId });
 
-            return MapearTreino(treinos);
+            var treinos = multi.Read<TreinoDTO>();
+            var total = multi.Read<int>().FirstOrDefault();
+
+            return new PagedResult<TreinoDTO>() {
+                List = treinos,
+                TotalResults = total,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
         }
 
-        public async Task<TreinoDTO> ObterTreinoPoId(Guid treinoId) {
-            const string sql = @"SELECT t.Id TreinoId, t.AlunoId, t.DataCadastro, 
+        public async Task<TreinoDTO> ObterTreinoPorId(Guid treinoId) {
+            const string sql = @"SELECT t.Id TreinoId, t.AlunoId, t.DataCadastro, t.Nome,  
                                 et.Id ExercicioTreinoId, et.ExercicioId, et.TreinoId ExercicioTreino_TreinoId, et.RepeticaoId FROM Treino t 
                                 JOIN ExercicioTreino et ON t.Id = et.TreinoId
                                 JOIN Aluno a ON a.Id = t.AlunoId
@@ -62,55 +89,56 @@ namespace PP.Treino.API.Data.Repositories
 
             var treino = await ObterConexao().QueryAsync<dynamic>(sql, new { treinoId });
 
-            return MapearTreino(treino).FirstOrDefault();
+            return MapearTreino(treino);
         }
 
         public async Task AdicionarTreino(Models.Treino treino) {
-            const string sqlInsertAluno = @"INSERT INTO Treino (Id, AlunoId, DataCadastro) VALUES (@Id, @AlunoId, @DataCadastro)";
-            const string sqlInsertExercicioTreino = @"INSERT INTO ExercicioTreino(Id, ExercicioId, TreinoId, RepeticaoId) 
-                                                        VALUES (@Id, @ExercicioId, @TreinoId, @RepeticaoId)";
+            const string sql = @"INSERT INTO Treino (Id, AlunoId, DataCadastro, Nome) VALUES (@Id, @AlunoId, @DataCadastro, @Nome)";
 
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled)) {
-                await ObterConexao().ExecuteAsync(sqlInsertAluno, treino);
-
-                foreach (var exercicio in treino.ExercicioTreino) {
-                    await ObterConexao().ExecuteAsync(sqlInsertExercicioTreino, exercicio);
-                }
+                await ExecuteAsync(sql, treino);
+                await _exercicioTreinoRepository.AdicionarExercicioTreino(treino.ExercicioTreino);
 
                 scope.Complete();
             }
         }
 
         public async Task AtualizarTreino(Models.Treino treino) {
-            const string sql = @"UPDATE ExercicioTreino SET ExercicioId = @ExercicioId, RepeticaoId = @RepeticaoId WHERE Id = @Id";
+            const string sql = @"UPDATE Treino SET Nome = @Nome WHERE Id = @Id";
             
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled)) {
-                foreach (var exercicio in treino.ExercicioTreino) {
-                    await ObterConexao().ExecuteAsync(sql, exercicio);
-                }
+                await ExecuteAsync(sql, treino);
+                await _exercicioTreinoRepository.AtualizarExercicioTreino(treino.ExercicioTreino);
 
                 scope.Complete();
             }
         }
 
 
-        private IEnumerable<TreinoDTO> MapearTreino(IEnumerable<dynamic> result)
+        private async Task ExecuteAsync(string sql, object parameters)
         {
-            return result.Select(x => new
+            var linhasAfetadas = await ObterConexao().ExecuteAsync(sql, parameters);
+
+            if (linhasAfetadas == 0)
+                throw new Exception("Erro interno. Consulte o administrador");
+        }
+
+        private TreinoDTO MapearTreino(IEnumerable<dynamic> result)
+        {
+            return result.Select(x => new TreinoDTO
             {
-                x.TreinoId,
-                x.AlunoId,
-                x.DataCadastro
-            }).Distinct().Select(x => 
-                new TreinoDTO{ Id = x.TreinoId, AlunoId = x.AlunoId, DataCadastro = x.DataCadastro, 
-                    ExercicioTreino = result.Where(y => y.ExercicioTreino_TreinoId == x.TreinoId)
-                            .Select(z => new ExercicioTreinoDTO {
-                                Id = z.ExercicioTreinoId,
-                                TreinoId = z.ExercicioTreino_TreinoId,
-                                ExercicioId = z.ExercicioId,
-                                RepeticaoId = z.RepeticaoId
-                            }).ToList()
-                });
+                Id = x.TreinoId,
+                AlunoId = x.AlunoId,
+                DataCadastro = x.DataCadastro,
+                Nome = x.Nome,
+                ExercicioTreino = result.Where(y => y.ExercicioTreino_TreinoId == x.TreinoId)
+                    .Select(z => new ExercicioTreinoDTO {
+                        Id = z.ExercicioTreinoId,
+                        TreinoId = z.ExercicioTreino_TreinoId,
+                        ExercicioId = z.ExercicioId,
+                        RepeticaoId = z.RepeticaoId
+                    }).ToList()
+            }).FirstOrDefault();
         }
     }
 }

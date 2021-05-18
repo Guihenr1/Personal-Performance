@@ -36,8 +36,6 @@ namespace PP.Usuario.API {
 
             services.AddMediatR(typeof(Startup));
 
-            services.AddAutoMapperConfiguration();
-
             services.AddMessageBusConfiguration(Configuration);
         }
 

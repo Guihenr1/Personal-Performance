@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PP.Treino.API.Data;
 
 namespace PP.Treino.API.Migrations
 {
     [DbContext(typeof(TreinoContext))]
-    partial class TreinoContextModelSnapshot : ModelSnapshot
+    [Migration("20210518015658_NomeTreino")]
+    partial class NomeTreino
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

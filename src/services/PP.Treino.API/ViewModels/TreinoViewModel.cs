@@ -6,6 +6,7 @@ namespace PP.Treino.API.ViewModels
 {
     public class TreinoViewModel {
         public List<ExercicioTreinoViewModel> ExercicioTreino { get; set; } = new List<ExercicioTreinoViewModel>();
+        public string Nome { get; set; }
         public Guid AlunoId { get; set; }
 
         public bool EhValido() {
@@ -13,7 +14,9 @@ namespace PP.Treino.API.ViewModels
         }
 
         private class TreinoValidation : AbstractValidator<TreinoViewModel> {
-            public TreinoValidation() {
+            public TreinoValidation()
+            {
+                RuleFor(x => x.Nome).NotNull().MaximumLength(100);
                 RuleForEach(x => x.ExercicioTreino).SetValidator(new ExercicioTreinoViewModelValidation());
             }
         }

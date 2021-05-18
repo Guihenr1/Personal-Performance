@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using PP.Core.Controllers;
 using PP.Core.DomainObjects;
 using PP.Core.Enums;
-using PP.Core.Messages.Integration;
 using PP.Core.User;
-using PP.Treino.API.Data;
 using PP.Treino.API.Data.Repositories;
 using PP.Treino.API.DTO;
 using PP.Treino.API.Models;
@@ -32,22 +28,22 @@ namespace PP.Treino.API.Controllers
         }
 
         [HttpGet("treinos-professor")]
-        public async Task<IEnumerable<TreinoDTO>> ObterTreinosAlunosProfessor() {
+        public async Task<PagedResult<TreinoDTO>> ObterTreinosAlunosProfessor([FromQuery] int ps = 8, [FromQuery] int page = 1) {
             EhProfessor();
 
-            return await _repository.ObterTreinosAlunosProfessor(_user.ObterUserId());
+            return await _repository.ObterTreinosAlunosProfessor(_user.ObterUserId(), ps, page);
         }
 
         [HttpGet("treinos-aluno")]
-        public async Task<IEnumerable<TreinoDTO>> ObterTreinosAluno()
+        public async Task<PagedResult<TreinoDTO>> ObterTreinosAluno([FromQuery] int ps = 8, [FromQuery] int page = 1)
         {
-            return await _repository.ObterTreinosAluno(_user.ObterUserId());
+            return await _repository.ObterTreinosAluno(_user.ObterUserId(), ps, page);
         }
 
         [HttpGet("treino-id/{id}")]
         public async Task<TreinoDTO> ObterTreinoPoId(Guid id)
         {
-            return await _repository.ObterTreinoPoId(id);
+            return await _repository.ObterTreinoPorId(id);
         }
 
         [HttpPost]
@@ -59,7 +55,7 @@ namespace PP.Treino.API.Controllers
 
             var treinoId = Guid.NewGuid();
 
-            await _repository.AdicionarTreino(new Models.Treino(treinoId, treino.AlunoId,
+            await _repository.AdicionarTreino(new Models.Treino(treinoId, treino.AlunoId, treino.Nome,
                 treino.ExercicioTreino.Select(x =>
                     new ExercicioTreino(Guid.NewGuid(), x.ExercicioId, treinoId, x.RepeticaoId)).ToList()));
 
@@ -72,7 +68,7 @@ namespace PP.Treino.API.Controllers
 
             if (!treino.EhValido()) return CustomResponse();
 
-            await _repository.AtualizarTreino(new Models.Treino(treinoId, treino.AlunoId,
+            await _repository.AtualizarTreino(new Models.Treino(treinoId, treino.AlunoId, treino.Nome, 
                 treino.ExercicioTreino.Select(x =>
                     new ExercicioTreino(x.Id, x.ExercicioId, treinoId, x.RepeticaoId)).ToList()));
 

@@ -10,7 +10,7 @@
             </summary>
             <response code="204">Aluno atualizado com sucesso</response>
         </member>
-        <member name="M:PP.Usuario.API.Controllers.AlunoController.Index">
+        <member name="M:PP.Usuario.API.Controllers.AlunoController.Index(System.Int32,System.Int32)">
             <summary>
             Obter todos os alunos.
             </summary>
@@ -22,7 +22,7 @@
             </summary>
             <response code="204">Professor atualizado com sucesso</response>
         </member>
-        <member name="M:PP.Usuario.API.Controllers.ProfessorController.Index">
+        <member name="M:PP.Usuario.API.Controllers.ProfessorController.Index(System.Int32,System.Int32)">
             <summary>
             Obter todos os professores
             </summary>

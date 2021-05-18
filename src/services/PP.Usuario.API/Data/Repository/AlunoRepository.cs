@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PP.Core.Data;
@@ -44,9 +42,17 @@ namespace PP.Usuario.API.Data.Repository
             _context.Entry(aluno).Property(x => x.Excluido).IsModified = true;
         }
 
-        public async Task<IEnumerable<Models.Aluno>> ObterTodos()
+        public async Task<PagedResult<Models.Aluno>> ObterTodos(int pageSize, int pageIndex)
         {
-            return await _context.Alunos.Include(x => x.Endereco).AsNoTracking().ToListAsync();
+            var alunos = await _context.Alunos.Include(x => x.Endereco).AsNoTracking()
+                .Skip(pageSize * (pageIndex - 1)).Take(pageSize).ToListAsync();
+
+            return new PagedResult<Models.Aluno> {
+                List = alunos,
+                TotalResults = await _context.Alunos.CountAsync(),
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
         }
 
         public Task<Models.Aluno> ObterPorEmail(string email)
