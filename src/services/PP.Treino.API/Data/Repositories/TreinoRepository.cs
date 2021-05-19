@@ -39,7 +39,10 @@ namespace PP.Treino.API.Data.Repositories
                                 ORDER BY t.DataCadastro DESC
                                 OFFSET {pageSize * (pageIndex - 1)} ROWS 
                                 FETCH NEXT {pageSize} ROWS ONLY 
-                                SELECT COUNT(Id) FROM Treino";
+                                SELECT COUNT(t.Id)  
+                                FROM Treino t 
+                                JOIN Aluno a ON a.Id = t.AlunoId 
+                                WHERE t.AlunoId = @alunoId";
 
             var multi = await ObterConexao()
                 .QueryMultipleAsync(sql, new { alunoId });
@@ -63,7 +66,10 @@ namespace PP.Treino.API.Data.Repositories
                                 ORDER BY t.DataCadastro DESC
                                 OFFSET {pageSize * (pageIndex - 1)} ROWS 
                                 FETCH NEXT {pageSize} ROWS ONLY 
-                                SELECT COUNT(Id) FROM Treino";
+                                SELECT COUNT(t.Id)  
+                                FROM Treino t 
+                                JOIN Aluno a ON a.Id = t.AlunoId
+                                WHERE a.ProfessorId = @professorId";
 
             var multi = await ObterConexao()
                 .QueryMultipleAsync(sql, new { professorId });
