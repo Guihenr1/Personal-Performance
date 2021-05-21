@@ -1,0 +1,93 @@
+version: "3"
+
+services:
+
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: rabbit-personalperformance
+        environment:
+            RABBITMQ_DEFAULT_USER: "personalperformance"
+            RABBITMQ_DEFAULT_PASS: "personalperformance"
+
+    sql-server:
+        image: pompilio/personalperformance-sql-server:latest
+        container_name: personalperformance-sql-server
+        build: 
+            context: ../sql
+            dockerfile: ./Dockerfile
+        environment:
+            SA_PASSWORD: "P3rs0n4l!"
+            ACCEPT_EULA: "Y" 
+            
+    api-identidade:
+        image: pompilio/personalperformance-api-identidade:latest
+        container_name: personalperformance-api-identidade    
+        build: 
+            context: ../src
+            dockerfile: ./services/PP.Identidade.API/Dockerfile  
+        ports:
+            - "5402:5402"
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:5402
+        depends_on:
+            - rabbitmq
+            
+    api-permissao:
+        image: pompilio/personalperformance-api-permissao:latest
+        container_name: personalperformance-api-permissao    
+        build: 
+            context: ../src
+            dockerfile: ./services/PP.Permissao.API/Dockerfile  
+        ports:
+            - "5302:5302"
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:5302
+        depends_on:
+            - rabbitmq
+            
+    api-treino:
+        image: pompilio/personalperformance-api-treino:latest
+        container_name: personalperformance-api-treino    
+        build: 
+            context: ../src
+            dockerfile: ./services/PP.Treino.API/Dockerfile  
+        ports:
+            - "5000:5000"
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:5000
+        depends_on:
+            - rabbitmq
+            
+    api-usuario:
+        image: pompilio/personalperformance-api-usuario:latest
+        container_name: personalperformance-api-usuario    
+        build: 
+            context: ../src
+            dockerfile: ./services/PP.Usuario.API/Dockerfile  
+        ports:
+            - "5102:5102"
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:5102
+        depends_on:
+            - rabbitmq
+
+    api-bff-identidades:
+        image: pompilio/personalperformance-api-bff-identidades:latest
+        container_name: personalperformance-api-bff-identidades
+        build: 
+            context: ../src
+            dockerfile: ./api gateways/PP.Bff.Identidades/Dockerfile  
+        ports:
+            - "5502:5502"
+        environment: 
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:5502
+        depends_on:
+            - rabbitmq
+            - api-identidade
+            - api-permissao    
+            

@@ -7,10 +7,12 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["src/services/PP.Permissao.API/PP.Permissao.API.csproj", "src/services/PP.Permissao.API/"]
-RUN dotnet restore "src/services/PP.Permissao.API/PP.Permissao.API.csproj"
+COPY ["./services/PP.Permissao.API/PP.Permissao.API.csproj", "services/PP.Permissao.API/"]
+COPY ["./building blocks/PP.Core/PP.Core.csproj", "building blocks/PP.Core/"]
+
+RUN dotnet restore "services/PP.Permissao.API/PP.Permissao.API.csproj"
 COPY . .
-WORKDIR "/src/src/services/PP.Permissao.API"
+WORKDIR "services/PP.Permissao.API"
 RUN dotnet build "PP.Permissao.API.csproj" -c Release -o /app/build
 
 FROM build AS publish

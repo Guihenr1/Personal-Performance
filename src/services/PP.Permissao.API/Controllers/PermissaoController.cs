@@ -5,18 +5,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PP.Core.Enums;
-using PP.Core.User;
 using PP.Permissao.API.Data;
 
 namespace PP.Permissao.API.Controllers {
     [Authorize]
     [Route("permissao")]
     public class PermissaoController {
-        private readonly IAspNetUser _user;
         private readonly PermissaoContext _context;
 
-        public PermissaoController(IAspNetUser user, PermissaoContext context) {
-            _user = user;
+        public PermissaoController(PermissaoContext context) {
             _context = context;
         }
 
