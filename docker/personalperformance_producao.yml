@@ -4,7 +4,9 @@ services:
 
     rabbitmq:
         image: rabbitmq:3-management
-        container_name: rabbit-personalperformance
+        container_name: rabbit-personalperformance  
+        ports:
+            - "1433:1433"
         environment:
             RABBITMQ_DEFAULT_USER: "personalperformance"
             RABBITMQ_DEFAULT_PASS: "personalperformance"
