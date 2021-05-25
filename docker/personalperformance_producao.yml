@@ -5,8 +5,6 @@ services:
     rabbitmq:
         image: rabbitmq:3-management
         container_name: rabbit-personalperformance  
-        ports:
-            - "1433:1433"
         environment:
             RABBITMQ_DEFAULT_USER: "personalperformance"
             RABBITMQ_DEFAULT_PASS: "personalperformance"
@@ -17,6 +15,8 @@ services:
         build: 
             context: ../sql
             dockerfile: ./Dockerfile
+        ports:
+            - "1433:1433"
         environment:
             SA_PASSWORD: "P3rs0n4l!"
             ACCEPT_EULA: "Y" 
