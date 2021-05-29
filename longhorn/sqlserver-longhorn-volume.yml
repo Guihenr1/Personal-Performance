@@ -1,0 +1,72 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sql-server
+  labels:
+    app: sql-server
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: sql-server
+  clusterIP: None
+
+
+
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sql-server-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 1Gi
+
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sql-server
+  labels:
+    app: sql-server
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: sql-server
+  template:
+    metadata:
+      labels:
+        app: sql-server
+    spec:
+      containers:
+      - image: mariadb:10.4
+        name: sql-server
+        env:
+        - name: SA_PASSWORD
+          value: P3rs0n4l!
+        ports:
+        - containerPort: 1433
+          name: sql-server
+        
+        volumeMounts:
+        - name: sql-server-volume
+          mountPath: /var/lib/sql-server
+        
+        env:
+        - name: SQL-SERVER_ROOT_PASSWORD
+          value: "P3rs0n4l!"
+      
+      volumes:
+      - name: sql-server-volume
+        persistentVolumeClaim:
+          claimName: sql-server-pvc
