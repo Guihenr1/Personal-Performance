@@ -52,7 +52,7 @@ spec:
       - image: mariadb:10.4
         name: sql-server
         env:
-        - name: SA_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
           value: P3rs0n4l!
         ports:
         - containerPort: 1433
@@ -63,7 +63,7 @@ spec:
           mountPath: /var/lib/sql-server
         
         env:
-        - name: SQL-SERVER_ROOT_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
           value: "P3rs0n4l!"
       
       volumes:
