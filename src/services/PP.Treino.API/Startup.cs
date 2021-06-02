@@ -12,28 +12,18 @@ namespace PP.Treino.API {
 
         public Startup(IHostEnvironment hostEnvironment)
         {
-            if (hostEnvironment.EnvironmentName == "Production") {
-                var builder = new ConfigurationBuilder()
-                    .SetBasePath(hostEnvironment.ContentRootPath)
-                    .AddJsonFile("appsettings.json", true, true)
-                    .AddJsonFile($"secrets/appsettings.Production.json", true, true)
-                    .AddEnvironmentVariables();
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(hostEnvironment.ContentRootPath)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
+                .AddEnvironmentVariables();
 
-                Configuration = builder.Build();
-            }
-            else {
-                var builder = new ConfigurationBuilder()
-                    .SetBasePath(hostEnvironment.ContentRootPath)
-                    .AddJsonFile("appsettings.json", true, true)
-                    .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
-                    .AddEnvironmentVariables();
 
-                Configuration = builder.Build();
+            if (hostEnvironment.IsDevelopment()) {
+                builder.AddUserSecrets<Startup>();
             }
 
-            //if (hostEnvironment.IsDevelopment()) {
-            //    builder.AddUserSecrets<Startup>();
-            //}
+            Configuration = builder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services) {
