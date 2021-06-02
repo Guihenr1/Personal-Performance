@@ -10,18 +10,30 @@ namespace PP.Treino.API {
     public class Startup {
         public IConfiguration Configuration { get; }
 
-        public Startup(IHostEnvironment hostEnvironment) {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(hostEnvironment.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
-                .AddEnvironmentVariables();
+        public Startup(IHostEnvironment hostEnvironment)
+        {
+            if (hostEnvironment.EnvironmentName == "Production") {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(hostEnvironment.ContentRootPath)
+                    .AddJsonFile("appsettings.json", true, true)
+                    .AddJsonFile($"secrets/appsettings.Production.json", true, true)
+                    .AddEnvironmentVariables();
 
-            if (hostEnvironment.IsDevelopment()) {
-                builder.AddUserSecrets<Startup>();
+                Configuration = builder.Build();
+            }
+            else {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(hostEnvironment.ContentRootPath)
+                    .AddJsonFile("appsettings.json", true, true)
+                    .AddJsonFile($"appsettings.{hostEnvironment.EnvironmentName}.json", true, true)
+                    .AddEnvironmentVariables();
+
+                Configuration = builder.Build();
             }
 
-            Configuration = builder.Build();
+            //if (hostEnvironment.IsDevelopment()) {
+            //    builder.AddUserSecrets<Startup>();
+            //}
         }
 
         public void ConfigureServices(IServiceCollection services) {
